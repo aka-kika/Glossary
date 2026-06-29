@@ -1,0 +1,194 @@
+[
+  {
+    "id": "framework",
+    "term": "Framework",
+    "whatItIs": "A pre-built starter kit and blueprint collection for writing software.",
+    "analogy": "A pre-fabricated LEGO house base—the structure is done, you just add your custom rooms.",
+    "whyItMatters": "It saves developers from writing standard, repetitive code from scratch every time.",
+    "example": "React (for websites) or Django (for backend applications)."
+  },
+  {
+    "id": "proxy",
+    "term": "Proxy",
+    "whatItIs": "A secure middleman between your computer and the internet.",
+    "analogy": "Hiring a personal shopper to buy a package so the store clerk never sees your face.",
+    "whyItMatters": "It hides your location (IP address) to protect your privacy or bypass restrictions.",
+    "example": "A corporate network filter or a security tool used to hide web browsing activity."
+  },
+  {
+    "id": "http",
+    "term": "HTTP",
+    "whatItIs": "The basic rules and formatting for how web browsers ask for pages.",
+    "analogy": "A standard, agreed-upon format for writing business letters that everyone uses.",
+    "whyItMatters": "Without this universal rulebook, your computer and web servers wouldn't understand each other.",
+    "example": "Your browser requesting to read a simple text article on an unencrypted webpage."
+  },
+  {
+    "id": "https",
+    "term": "HTTPS",
+    "whatItIs": "The exact same thing as HTTP, but fully encrypted and totally secure.",
+    "analogy": "Locking your letter inside an unbreakable metal safe instead of sending a postcard.",
+    "whyItMatters": "It keeps credit cards, passwords, and user details safe from hackers mid-transit.",
+    "example": "Accessing online banking or checking your personal emails."
+  },
+  {
+    "id": "interface",
+    "term": "Interface",
+    "whatItIs": "The clean touchpoint where two separate systems connect and pass messages.",
+    "analogy": "A car's steering wheel and pedals. You interact with those instead of touching the raw engine.",
+    "whyItMatters": "It lets humans run code smoothly, or lets different pieces of software trade data securely.",
+    "example": "The buttons on an app screen (UI) or a standardized link that joins two applications (API)."
+  },
+  {
+    "id": "vps",
+    "term": "VPS (Virtual Private Server)",
+    "whatItIs": "A private, dedicated portion of a larger cloud computer rented out to you.",
+    "analogy": "Renting an apartment. You share the overall building framework, but your space has its own key.",
+    "whyItMatters": "It lets you run software 24/7 without having to buy or leave your home laptop running.",
+    "example": "Hosting a private gaming server or keeping a small website online all night."
+  },
+  {
+    "id": "mcp-server",
+    "term": "MCP Server",
+    "whatItIs": "An intermediate tool that formats your local data so an AI model can read it safely.",
+    "analogy": "A private assistant who reorganizes your messy room files before handing them to the boss.",
+    "whyItMatters": "It lets AI programs understand context and interact with your databases cleanly.",
+    "example": "A backend utility that hands your local folder contents over to an AI text generator."
+  },
+  {
+    "id": "mcp-tunnel",
+    "term": "MCP Tunnel",
+    "whatItIs": "A highly secure, private path linking an outside cloud AI directly to a local computer.",
+    "analogy": "A secret underground passage connecting two buildings so messengers avoid public roads.",
+    "whyItMatters": "It connects tools across the web without opening your home machine up to internet intruders.",
+    "example": "An encrypted connection linking a central web platform to an app on your personal desk."
+  },
+  {
+    "id": "sdk",
+    "term": "SDK (Software Development Kit)",
+    "whatItIs": "A specialized digital toolbox packed with pre-made tools for building software on a specific system.",
+    "analogy": "A box of cake mix that comes with flour, sugar, instructions, and frosting already bundled.",
+    "whyItMatters": "It provides pre-made building blocks so developers don't waste time engineering basic features.",
+    "example": "The Android SDK used by developers to make games run properly on Android phones."
+  },
+  {
+    "id": "acp",
+    "term": "ACP (Access Control Policy)",
+    "whatItIs": "A strict set of digital permission rules indicating who can view or modify data.",
+    "analogy": "A VIP list at a restricted door monitored by a bouncer who checks IDs closely.",
+    "whyItMatters": "It blocks regular users or untrusted software programs from changing critical configurations.",
+    "example": "Settings that only allow administrators to view payroll information in a company directory."
+  },
+  {
+    "id": "ci",
+    "term": "CI (Continuous Integration)",
+    "whatItIs": "An automated testing system that evaluates changes as soon as code is written.",
+    "analogy": "An auto-spellchecker that immediately scans your work every single time you hit save.",
+    "whyItMatters": "It catches development bugs instantly before they break anything for actual users.",
+    "example": "An automation loop checking code for errors whenever a designer submits updates."
+  },
+  {
+    "id": "mongodb",
+    "term": "MongoDB",
+    "whatItIs": "A modern, flexible database that stores data like loose papers in a folder.",
+    "analogy": "A flexible folder organizer rather than a rigid, locked grid structure like Excel.",
+    "whyItMatters": "It handles rapidly changing, irregular, or unstructured data smoothly.",
+    "example": "Storing user profiles where everyone fills out different optional bio details."
+  },
+  {
+    "id": "api",
+    "term": "API (Application Programming Interface)",
+    "whatItIs": "The digital messenger that securely delivers your app request to an outside server and returns a response.",
+    "analogy": "A restaurant waiter. They take your order to the kitchen crew and bring your cooked meal back to your table.",
+    "whyItMatters": "It lets separate applications share features and exchange live data without knowing each other's entire codebase.",
+    "example": "A website utilizing a 'Log in with Google or Apple' shortcut button."
+  },
+  {
+    "id": "json",
+    "term": "JSON (JavaScript Object Notation)",
+    "whatItIs": "A clean, universal text formatting standard used to structure and transmit descriptive data.",
+    "analogy": "A standardized shipping slip on a parcel box that lists contents using clear, pairing keys.",
+    "whyItMatters": "It acts as a neutral language that almost all modern computers understand, simplifying data transfers.",
+    "example": "The data format MongoDB relies on to save record files cleanly."
+  },
+  {
+    "id": "webhook",
+    "term": "Webhook",
+    "whatItIs": "An automated background prompt sent immediately from an app whenever a specific event occurs.",
+    "analogy": "Getting an automated SMS delivery notification right when a courier drops a box on your porch.",
+    "whyItMatters": "It preserves system power since an app doesn't have to constantly refresh or check for status updates.",
+    "example": "A checkout processor alerting your online shop immediately that a payment cleared."
+  },
+  {
+    "id": "environment-variables",
+    "term": "Environment Variables",
+    "whatItIs": "Secret backend application settings stored fully isolated from core software logic.",
+    "analogy": "A secure wall safe protecting house vault codes rather than framing the passcode directly on the entry door.",
+    "whyItMatters": "It keeps critical passwords hidden so developers don't expose keys publicly inside repositories.",
+    "example": "Storing sensitive AI API access tokens away inside a protected hidden file."
+  },
+  {
+    "id": "middleware",
+    "term": "Middleware",
+    "whatItIs": "An invisible functional junction that checks or modifies incoming visitor requests before processing them.",
+    "analogy": "An airport TSA screening station verifying passports and luggage items before boarding gates open.",
+    "whyItMatters": "It automatically coordinates wide tasks like user session validation, error logging, and encryption filters.",
+    "example": "A quick function confirming a visitor has valid login privileges before opening their personal dash."
+  },
+  {
+    "id": "docker",
+    "term": "Docker",
+    "whatItIs": "A deployment system that seals an application and its necessary code tools together into one mobile unit.",
+    "analogy": "An industrial cargo container. It stacks perfectly on ships, trains, or trucks without modifying contents.",
+    "whyItMatters": "It guarantees software executes identically on a local laptop or a faraway remote deployment platform.",
+    "example": "Wrapping up an operational backend routine to ensure it initiates instantly on any cloud node."
+  },
+  {
+    "id": "git",
+    "term": "Git / Version Control",
+    "whatItIs": "An organized tracking utility that documents code changes and keeps a comprehensive history logs file.",
+    "analogy": "A sandbox game save timeline. If updates break stability, you can roll backward instantly to safety.",
+    "whyItMatters": "It permits engineering teams to work concurrently on shared modules without deleting other changes.",
+    "example": "Using commands to record progress checkpoints before integrating a massive app revamp."
+  },
+  {
+    "id": "deployment",
+    "term": "Deployment",
+    "whatItIs": "The physical transition step of launching functional code from a private computer onto live servers.",
+    "analogy": "A storefront launch. Carting items out from an internal storage area to visible shop shelves.",
+    "whyItMatters": "It makes localized code files active and accessible to worldwide consumers over internet pipelines.",
+    "example": "Pushing verified application blocks onto a virtual server network to make a public link live."
+  },
+  {
+    "id": "encryption",
+    "term": "Encryption",
+    "whatItIs": "Mathematical scrambling that turns plain data unreadable without matching software authorization keys.",
+    "analogy": "Drafting secret courier diaries inside complex ciphers that reveal text only through matching decoder rings.",
+    "whyItMatters": "It guards data packets from sniffing even if criminal groups manage to trace data wires.",
+    "example": "The internal algorithms handling file confidentiality safeguards inside security layers like HTTPS."
+  },
+  {
+    "id": "dns",
+    "term": "DNS (Domain Name System)",
+    "whatItIs": "The internet's naming directory that matches human-readable site names with exact server IP numbers.",
+    "analogy": "A phonebook directory. Searching for a name label instead of manually entering a phone number string.",
+    "whyItMatters": "It allows web users to find sites easily using standard words instead of memorize numerical digits.",
+    "example": "Entering a plain domain path to prompt the browser to discover its hosting data source coordinates."
+  },
+  {
+    "id": "endpoint",
+    "term": "Endpoint",
+    "whatItIs": "The precise destination link on an API framework designated to fulfill a specialized instruction.",
+    "analogy": "Specific service windows at town hall. Window A settles utility fees, while Window B renews permits.",
+    "whyItMatters": "It supplies calling software systems with structured directory layouts to trigger precise commands.",
+    "example": "Directing a lookup tool toward a system path explicitly designed to pull member profiles."
+  },
+  {
+    "id": "frontend-backend",
+    "term": "Frontend vs. Backend",
+    "whatItIs": "The division between client visual layers (Frontend) and deep logic databases operating out of view (Backend).",
+    "analogy": "A live theater. The frontend includes lighting, stages, and visible cast. The backend covers gears and scaffolding.",
+    "whyItMatters": "It permits graphic engineers to build interface experiences while software engineers harden data architectures.",
+    "example": "Buttons and interactive color animations are Frontend; server query matching inside MongoDB is Backend."
+  }
+]
