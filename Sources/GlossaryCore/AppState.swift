@@ -8,7 +8,7 @@ public final class AppState: ObservableObject {
     /// The two keyboard modes. See design spec §3.
     public enum Mode: Sendable, Equatable {
         case list      // search field is first responder; typing/arrows
-        case detail    // a term is focused; Space / Cmd+D / Cmd+C act on it
+        case detail    // a term is focused; Space steps disclosure, Cmd+C copies
     }
 
     @Published public private(set) var query: String = ""

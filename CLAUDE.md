@@ -6,10 +6,10 @@ Project memory for Claude Code. Read this first.
 
 **Glossary** — a native macOS menu-bar utility (Swift 6.3, SwiftUI + AppKit). A
 keyboard-first, distraction-free glossary: summon a centered Raycast-style overlay
-with `Option+Space`, fuzzy-search a small tech glossary, and reveal each term through
+with `⌥Esc`, fuzzy-search a small tech glossary, and reveal each term through
 4 tiers of progressive disclosure — no mouse required.
 
-Design spec: [docs/superpowers/specs/2026-06-29-glossary-menu-bar-design.md](docs/superpowers/specs/2026-06-29-glossary-menu-bar-design.md)
+Design spec: [docs/design-spec.md](docs/design-spec.md)
 
 ## ⚠️ Docs discipline — update docs on EVERY change
 
@@ -36,8 +36,9 @@ as **not done** until its docs are updated.
   `GlobalHotkey` (Carbon `RegisterEventHotKey`), `Settings` (UserDefaults store) +
   `SettingsView`/`SettingsWindowController`, SwiftUI views. `AppDelegate` routes
   summon to the configured presentation mode and re-registers the hotkey on change.
-- Two keyboard modes — **List** (typing/arrows) and **Detail** (Space/⌘D/⌘C). `Esc`
-  is two-stage (Back from a term, then close). See spec §3.
+- Two keyboard modes — **List** (typing/arrows) and **Detail** (`Space` steps the
+  disclosure loop, `⌘C` copies). `Esc` is two-stage (Back from a term, then close).
+  See spec §3.
 - Default hotkey **⌥Esc** (rebindable in Settings). Presentation: Overlay or Mini.
 - Terms load from an editable file (`~/Library/Application Support/Glossary/glossary.json`)
   seeded from the bundled `glossary.json`; `GlossaryLibrary` handles seed/load/reload/reset

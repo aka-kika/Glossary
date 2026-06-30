@@ -27,12 +27,23 @@
 
 ---
 
+## Install
+
+Grab `Glossary-x.y.z.dmg` from the [latest release](https://github.com/aka-kika/Glossary/releases),
+open it, and drag **Glossary** into **Applications**. Then launch it and press `⌥Esc`.
+
+The DMG is **signed with a Developer ID and notarized by Apple**, so it opens with a
+normal double-click — no Gatekeeper "damaged" or "unidentified developer" prompt.
+
+> Prefer to build it yourself? See **Build & run** below. To cut your own signed,
+> notarized DMG, use `scripts/release-dmg.sh`.
+
 ## Why
 
 Looking up a term shouldn't break your flow. Glossary lives in the menu bar, opens
 on a global hotkey, and reveals just enough — a one-line summary first, then an
 analogy, then the deep dive — all driven by a single key. It's built to **minimize
-cognitive load** while you learn.
+cognitive load** while you learn. The fuller rationale lives in [WHY.md](WHY.md).
 
 ## Features
 
@@ -104,12 +115,18 @@ Requires Xcode 26 / Swift 6.3.
 ```bash
 swift run Glossary        # run in dev
 swift test                # run the unit tests
-scripts/build-app.sh      # build a distributable Glossary.app
+scripts/build-app.sh      # build a local Glossary.app (ad-hoc signed)
+scripts/release-dmg.sh    # build a signed + notarized DMG for distribution
 ```
 
 `scripts/build-app.sh` produces `Glossary.app` — a menu-bar agent (no Dock icon).
 Double-click it, or add it to **System Settings → General → Login Items**, then press
-`⌥Esc`.
+`⌥Esc`. A locally built app is never quarantined, so it just runs.
+
+`scripts/release-dmg.sh` produces the public `Glossary-x.y.z.dmg`: it re-signs the app
+with a **Developer ID** + Hardened Runtime, **notarizes** it with Apple, and **staples**
+the ticket to both the app and the DMG. Needs a Developer ID Application certificate and
+notary credentials stored under a keychain profile — see the header of the script.
 
 ## Architecture
 
@@ -120,7 +137,8 @@ Double-click it, or add it to **System Settings → General → Login Items**, t
   floating `NSPanel` overlay and `NSPopover` mini mode, Settings, and the SwiftUI
   views.
 
-See [CLAUDE.md](CLAUDE.md) and the [design spec](docs/superpowers/specs/2026-06-29-glossary-menu-bar-design.md).
+See [WHY.md](WHY.md) for the rationale, [CLAUDE.md](CLAUDE.md) for the build map, and
+the [design spec](docs/design-spec.md) for the full design.
 
 ## License
 

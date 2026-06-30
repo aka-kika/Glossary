@@ -6,6 +6,29 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+### Added
+- **Signed + notarized distribution** via `scripts/release-dmg.sh`. The script re-signs
+  `Glossary.app` with a **Developer ID Application** certificate + Hardened Runtime +
+  secure timestamp, submits it to Apple's notary service, and staples the ticket to both
+  the app and the DMG. The resulting `Glossary-x.y.z.dmg` opens with a normal
+  double-click on any Mac.
+- **README "Install" section** for downloading the DMG from Releases.
+- **`WHY.md`** — a standalone "why it exists" doc: the problem, the bet, the design
+  principles, and the non-goals. Linked from the README and the design spec.
+
+### Changed
+- **Docs cleanup.** Moved the design spec from `docs/superpowers/specs/2026-06-29-…md`
+  to `docs/design-spec.md` (and updated every link). Corrected stale facts across
+  `CLAUDE.md`/`TODO.md`: default hotkey is `⌥Esc` (not `Option+Space`), the seed glossary
+  has **54** terms (not 24), the suite is **35** tests (not 26), and dropped references
+  to a `⌘D` shortcut that no longer exists (disclosure is the `Space` loop; `⌘C` copies).
+
+### Fixed
+- **Downloaded DMG no longer blocked by Gatekeeper.** The 0.1.0 DMG was only ad-hoc
+  signed, so once downloaded through a browser it was quarantined and refused to open
+  ("damaged" / "unidentified developer"). The distribution build is now Developer-ID
+  signed and Apple-notarized, which clears the quarantine check on launch.
+
 ## [0.1.0] - 2026-06-29
 
 ### Added
@@ -102,8 +125,7 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   bleed-through and restores legible, on-brand contrast.
 
 ### Added
-- Approved design spec for the Glossary menu-bar utility
-  (`docs/superpowers/specs/2026-06-29-glossary-menu-bar-design.md`).
+- Approved design spec for the Glossary menu-bar utility (`docs/design-spec.md`).
 - Project docs: `CLAUDE.md`, `README.md`, `CHANGELOG.md`, `TODO.md`.
 - KIKA brand palette adopted as the app's visual system (accent `#6D80A6`,
   bg `#2C2D2F`, fg `#E7E5E0`; brand-derived disclosure-block header accents).
