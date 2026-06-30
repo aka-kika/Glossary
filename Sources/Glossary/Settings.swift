@@ -51,6 +51,7 @@ struct HotkeyPreset: Identifiable, Equatable {
 
     // Carbon modifier masks (avoid importing Carbon here).
     private static let cmd: UInt32 = 0x0100
+    private static let shift: UInt32 = 0x0200
     private static let option: UInt32 = 0x0800
     private static let control: UInt32 = 0x1000
     // Virtual key codes.
@@ -59,12 +60,14 @@ struct HotkeyPreset: Identifiable, Equatable {
     private static let grave: UInt32 = 50
 
     static let all: [HotkeyPreset] = [
-        .init(id: "opt-esc",        label: "⌥ Esc",        keyCode: escape, modifiers: option),
-        .init(id: "ctrl-space",     label: "⌃ Space",      keyCode: space,  modifiers: control),
-        .init(id: "ctrl-grave",     label: "⌃ ` (backtick)", keyCode: grave, modifiers: control),
-        .init(id: "opt-space",      label: "⌥ Space",      keyCode: space,  modifiers: option),
-        .init(id: "cmd-esc",        label: "⌘ Esc",        keyCode: escape, modifiers: cmd),
-        .init(id: "ctrl-opt-space", label: "⌃⌥ Space",     keyCode: space,  modifiers: control | option),
+        .init(id: "opt-esc",        label: "⌥ Esc",          keyCode: escape, modifiers: option),
+        .init(id: "ctrl-esc",       label: "⌃ Esc",          keyCode: escape, modifiers: control),
+        .init(id: "shift-esc",      label: "⇧ Esc",          keyCode: escape, modifiers: shift),
+        .init(id: "cmd-esc",        label: "⌘ Esc",          keyCode: escape, modifiers: cmd),
+        .init(id: "ctrl-space",     label: "⌃ Space",        keyCode: space,  modifiers: control),
+        .init(id: "opt-space",      label: "⌥ Space",        keyCode: space,  modifiers: option),
+        .init(id: "ctrl-grave",     label: "⌃ ` (backtick)", keyCode: grave,  modifiers: control),
+        .init(id: "ctrl-opt-space", label: "⌃⌥ Space",       keyCode: space,  modifiers: control | option),
     ]
     static let defaultID = "opt-esc"
     static func preset(id: String) -> HotkeyPreset { all.first { $0.id == id } ?? all[0] }

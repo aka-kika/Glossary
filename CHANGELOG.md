@@ -47,6 +47,12 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   to the result list; from the list it dismisses (footer hint shows Back/Close).
 
 ### Added
+- Two more summon-hotkey presets: **⌃ Esc** and **⇧ Esc** (the Esc-based options
+  are now grouped together in the picker).
+- **Polished Settings window** — an app header (icon + name + version), sections
+  with SF Symbol labels, the glossary actions in a compact **2-column grid** of
+  labelled buttons showing the file path, and a "Reset All Settings to Defaults"
+  action. Window tightened to 480×580.
 - Menu-bar menu polish: **Show Glossary** now displays the current summon hotkey
   and the app's `{ / }` glyph; Settings and Quit got icons too.
 
