@@ -5,6 +5,7 @@ import GlossaryCore
 /// term (Detail mode), then a keyboard-hint footer. Wrapped in glassmorphism.
 struct RootView: View {
     @EnvironmentObject private var state: AppState
+    @Environment(\.colorScheme) private var scheme
 
     var body: some View {
         VStack(spacing: 0) {
@@ -22,15 +23,23 @@ struct RootView: View {
 
             HintFooter()
         }
-        .frame(width: Theme.panelWidth, height: Theme.panelHeight)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous)
-                .strokeBorder(Theme.line, lineWidth: 1)
-        )
-        .clipShape(RoundedRectangle(cornerRadius: Theme.cornerRadius, style: .continuous))
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        // Let the window vibrancy carry the surface. In dark we add a strong KIKA
+        // tint for legibility over the dark HUD material + a faint top sheen; in
+        // light we keep the tint very light so it reads as a native translucent
+        // panel rather than a flat white fill.
+        .background {
+            ZStack {
+                Theme.bg.opacity(scheme == .dark ? 0.72 : 0.14)
+                if scheme == .dark {
+                    LinearGradient(
+                        colors: [Color.white.opacity(0.05), .clear],
+                        startPoint: .top, endPoint: .center
+                    )
+                }
+            }
+        }
         .tint(Theme.accent)
-        .environment(\.colorScheme, .dark)
     }
 }
 
@@ -49,21 +58,21 @@ private struct HintFooter: View {
                 hint("↵", "Open")
             }
             Spacer()
-            hint("esc", "Close")
+            hint("esc", state.mode == .detail ? "Back" : "Close")
         }
-        .font(.system(size: 11, weight: .medium))
+        .font(.system(.caption2, weight: .medium))
         .foregroundStyle(Theme.fg3)
-        .padding(.horizontal, 18)
-        .padding(.vertical, 10)
+        .padding(.horizontal, 14)
+        .padding(.vertical, 8)
         .background(Theme.line2)
     }
 
     private func hint(_ key: String, _ label: String) -> some View {
-        HStack(spacing: 5) {
+        HStack(spacing: 4) {
             Text(key)
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                .font(.system(.caption2, design: .monospaced, weight: .semibold))
                 .foregroundStyle(Theme.fg2)
-                .padding(.horizontal, 5)
+                .padding(.horizontal, 4)
                 .padding(.vertical, 1)
                 .background(Theme.line, in: RoundedRectangle(cornerRadius: 4))
             Text(label)

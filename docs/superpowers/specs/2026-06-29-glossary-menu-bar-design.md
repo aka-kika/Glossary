@@ -12,8 +12,13 @@ term's explanation through 4 tiers of progressive disclosure — all without the
 
 ## 1. Goals & non-goals
 
+> **Update (v1.1):** the default summon hotkey is **⌥Esc** (Option+Space collides
+> with Raycast) and is now **rebindable** in a Settings window; a **Mini** menu-bar
+> presentation mode, **panel-size presets**, and **Light/Dark/System** theming were
+> added. See the CHANGELOG for the full list.
+
 **Goals (v1):**
-- Global summon/hide overlay via `Option+Space`.
+- Global summon/hide overlay via a 2-key hotkey (default `⌥Esc`, configurable).
 - Centered, floating, non-activating panel (does not steal focus from the user's work).
 - Clipboard auto-load: on summon, if the clipboard matches a term, jump straight to it.
 - Fuzzy, live search with arrow-key navigation.
@@ -83,7 +88,8 @@ term. Resolved with two modes rather than heuristics:
   - `Cmd+D` → toggle **Level 3 (Why It Matters + Example)**.
   - `Cmd+C` → copy formatted block of the active term.
   - Any character or `↑` / `↓` → return to **List mode** and apply.
-- **Global, either mode:** `Escape` and `Option+Space` → dismiss + clear all state.
+- **`Escape`** is two-stage: from Detail mode it returns to the list (Back); from
+  List mode it dismisses + clears all state. The summon hotkey always toggles/hides.
 
 ### Progressive disclosure
 

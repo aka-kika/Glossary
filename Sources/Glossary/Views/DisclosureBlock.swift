@@ -7,23 +7,23 @@ struct DisclosureBlock: View {
     let accent: Color
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 7) {
-            HStack(spacing: 7) {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 6) {
                 RoundedRectangle(cornerRadius: 2)
                     .fill(accent)
-                    .frame(width: 3, height: 13)
+                    .frame(width: 3, height: 12)
                 Text(title.uppercased())
-                    .font(.system(size: 11, weight: .bold))
-                    .tracking(0.8)
+                    .font(.system(.caption2, weight: .bold))
+                    .tracking(0.7)
                     .foregroundStyle(accent)
             }
             Text(text)
-                .font(.system(size: 14))
+                .font(.system(.callout))
                 .foregroundStyle(Theme.fg2)
                 .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(14)
+        .padding(12)
         .background(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .fill(accent.opacity(0.08))

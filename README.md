@@ -9,25 +9,37 @@ mouse.
 
 ## Features
 
-- **Global summon** — `Option+Space` shows/hides a floating overlay from anywhere.
+- **Global summon** — `⌥Esc` (default, rebindable) shows/hides the overlay from anywhere.
 - **Clipboard auto-load** — on summon, if your clipboard matches a term, it loads instantly.
 - **Fuzzy search** — type to filter; `↑`/`↓` to navigate results.
 - **Progressive disclosure** — reveal more only when you want it (4 tiers).
 - **Copy** — `Cmd+C` copies a clean, formatted block of the active term.
+- **Two presentation modes** — a centered Raycast-style **Overlay**, or a compact
+  **Mini** dropdown from the menu bar that shows only the "What It Is" summary.
 - **Keyboard-only** — no mouse interaction required for anything.
 
 ## Keyboard
 
 | Key | Action |
 | --- | --- |
-| `Option+Space` | Summon / hide the overlay (global) |
+| `⌥Esc` *(default)* | Summon / hide (global; rebindable in Settings) |
 | Type | Fuzzy-filter terms (List mode) |
 | `↑` / `↓` | Move through results |
 | `Enter` | Focus the highlighted term |
 | `Space` / `Enter` | Toggle **Analogy** (Level 2) |
 | `Cmd+D` | Toggle **Why It Matters + Example** (Level 3) |
 | `Cmd+C` | Copy the active term |
-| `Escape` | Dismiss and clear |
+| `Escape` | **Back** to the list from a term, or dismiss from the list |
+
+## Settings
+
+Open from the menu-bar icon → **Settings…** (or `⌘,`):
+
+- **Hotkey** — pick the 2-key summon chord.
+- **Window style** — Overlay (centered) or Mini (menu-bar dropdown).
+- **Panel size** — Small / Medium / Large (Overlay mode).
+- **Theme** — System / Dark / Light (KIKA palette).
+- **Launch at login**, **Auto-load from clipboard**, and **Reset to Defaults**.
 
 ## Build & run
 

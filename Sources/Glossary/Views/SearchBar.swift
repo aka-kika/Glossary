@@ -3,7 +3,10 @@ import GlossaryCore
 
 /// The always-present search field. Stays first responder while the overlay is
 /// open; its binding drives `AppState.setQuery`, which keeps us in List mode.
+/// `compact` is used by Mini mode.
 struct SearchBar: View {
+    var compact: Bool = false
+
     @EnvironmentObject private var state: AppState
     @FocusState private var focused: Bool
 
@@ -12,21 +15,21 @@ struct SearchBar: View {
     }
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: compact ? 8 : 11) {
             Image(systemName: "magnifyingglass")
-                .font(.system(size: 16, weight: .medium))
+                .font(.system(compact ? .subheadline : .body, weight: .medium))
                 .foregroundStyle(Theme.fg3)
 
             TextField("Search terms…", text: queryBinding)
                 .textFieldStyle(.plain)
-                .font(.system(size: 21, weight: .regular))
+                .font(.system(compact ? .body : .title3))
                 .foregroundStyle(Theme.fg)
                 .focused($focused)
                 .onSubmit { state.focusSelected() }
                 .accentColor(Theme.accent)
         }
-        .padding(.horizontal, 20)
-        .frame(height: 60)
+        .padding(.horizontal, compact ? 12 : 16)
+        .frame(height: compact ? 38 : 46)
         .onAppear { focused = true }
         .onChange(of: state.focusRequestID) { _, _ in focused = true }
     }

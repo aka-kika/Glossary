@@ -42,10 +42,27 @@ Living task list. Check items off as they land; add follow-ups as you find them.
 - [ ] Clipboard auto-load: copy "Docker", summon → opens Docker
 - [ ] Glassmorphism + KIKA dark palette render correctly
 
-## Later (deferred from v1)
-- [ ] Configurable global hotkey
+## v1.1 — settings & modes (done)
+- [x] Default hotkey → ⌥Esc; rebindable in Settings (live re-register)
+- [x] Settings window (UserDefaults): hotkey, window style, size, theme,
+      launch at login, clipboard toggle, reset to defaults
+- [x] Mini mode — menu-bar popover showing only "What It Is"
+- [x] Panel size presets (Small / Medium / Large)
+- [x] Light / Dark / System theme (dynamic KIKA tokens)
+- [x] Launch at login (SMAppService)
+- [x] Esc two-stage Back (term → list → dismiss)
+
+### Verify (needs a live desktop session)
+- [ ] ⌥Esc summons; rebinding in Settings takes effect immediately
+- [ ] Mini mode opens from the menu-bar icon, shows search + What It Is only
+- [ ] Panel size + theme changes apply on next summon
+- [ ] Launch at login registers/unregisters (check System Settings → Login Items)
+- [ ] Esc goes back to the list from a term, then closes
+
+## Later (deferred)
+- [ ] Free-form hotkey recorder (vs. preset list)
 - [ ] Modules / categories grouping
 - [ ] In-app term editing
 - [ ] Recents / persistence
 - [ ] Bundle Fira Sans/Code brand fonts
-- [ ] App icon + light-mode option
+- [ ] App icon

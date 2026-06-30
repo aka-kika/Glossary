@@ -8,42 +8,38 @@ final class OverlayPanel: NSPanel {
     override var canBecomeMain: Bool { false }
 }
 
-/// Owns the summoned overlay: shows/centers/hides it, reads the clipboard on
-/// summon, and routes keystrokes to `AppState`.
+/// Owns the centered overlay (Overlay presentation mode): shows/centers/hides it,
+/// reads the clipboard on summon, and routes keystrokes to `AppState`.
 final class OverlayPanelController {
     private let appState: AppState
+    private let settings: Settings
     private var panel: OverlayPanel?
     private var keyMonitor: Any?
 
-    /// Virtual key codes (US layout) — avoids importing Carbon here.
-    private enum Key {
-        static let escape: UInt16 = 53
-        static let returnKey: UInt16 = 36
-        static let keypadEnter: UInt16 = 76
-        static let space: UInt16 = 49
-        static let arrowUp: UInt16 = 126
-        static let arrowDown: UInt16 = 125
-        static let d: UInt16 = 2
-        static let c: UInt16 = 8
+    init(appState: AppState, settings: Settings) {
+        self.appState = appState
+        self.settings = settings
     }
 
-    init(appState: AppState) {
-        self.appState = appState
-    }
+    var isVisible: Bool { panel?.isVisible ?? false }
 
     // MARK: - Show / hide
 
     func toggle() {
-        if let panel, panel.isVisible { hide() } else { show() }
+        if isVisible { hide() } else { show() }
     }
 
     func show() {
-        let panel = panel ?? makePanel()
+        // Rebuild each time so size + appearance changes take effect immediately.
+        if let panel { panel.orderOut(nil) }
+        let panel = makePanel()
         self.panel = panel
 
-        // Auto-load from the clipboard before the view appears.
-        let clip = NSPasteboard.general.string(forType: .string) ?? ""
-        appState.resolve(clipboard: clip)
+        if settings.clipboardAutoLoad {
+            appState.resolve(clipboard: NSPasteboard.general.string(forType: .string) ?? "")
+        } else {
+            appState.reset()
+        }
 
         center(panel)
         installKeyMonitor()
@@ -61,8 +57,12 @@ final class OverlayPanelController {
     // MARK: - Panel construction
 
     private func makePanel() -> OverlayPanel {
+        let size = settings.panelSize.size
+        let appearance = settings.appearance.nsAppearance ?? NSApp.effectiveAppearance
+        let isDark = Theme.isDark(appearance)
+
         let panel = OverlayPanel(
-            contentRect: NSRect(x: 0, y: 0, width: Theme.panelWidth, height: Theme.panelHeight),
+            contentRect: NSRect(origin: .zero, size: size),
             styleMask: [.borderless, .nonactivatingPanel],
             backing: .buffered,
             defer: false
@@ -74,13 +74,31 @@ final class OverlayPanelController {
         panel.isOpaque = false
         panel.backgroundColor = .clear
         panel.hasShadow = true
-        panel.isMovableByWindowBackground = false
-        panel.appearance = NSAppearance(named: .darkAqua)
+        panel.appearance = appearance
+
+        let visual = NSVisualEffectView()
+        visual.material = isDark ? .hudWindow : .menu
+        visual.blendingMode = .behindWindow
+        visual.state = .active
+        visual.appearance = appearance
+        visual.wantsLayer = true
+        visual.layer?.cornerRadius = Theme.cornerRadius
+        visual.layer?.cornerCurve = .continuous
+        visual.layer?.masksToBounds = true
+        visual.layer?.borderWidth = 1
+        visual.layer?.borderColor = NSColor(white: isDark ? 0.9 : 0.0, alpha: 0.10).cgColor
 
         let host = NSHostingView(rootView: RootView().environmentObject(appState))
-        host.frame = panel.contentLayoutRect
-        host.autoresizingMask = [.width, .height]
-        panel.contentView = host
+        host.translatesAutoresizingMaskIntoConstraints = false
+        visual.addSubview(host)
+        NSLayoutConstraint.activate([
+            host.leadingAnchor.constraint(equalTo: visual.leadingAnchor),
+            host.trailingAnchor.constraint(equalTo: visual.trailingAnchor),
+            host.topAnchor.constraint(equalTo: visual.topAnchor),
+            host.bottomAnchor.constraint(equalTo: visual.bottomAnchor),
+        ])
+
+        panel.contentView = visual
         return panel
     }
 
@@ -89,7 +107,6 @@ final class OverlayPanelController {
         let frame = screen.visibleFrame
         let size = panel.frame.size
         let x = frame.midX - size.width / 2
-        // Sit a little above true center — feels more natural (Raycast-style).
         let y = frame.midY - size.height / 2 + frame.height * 0.08
         panel.setFrameOrigin(NSPoint(x: x, y: y))
     }
@@ -109,49 +126,63 @@ final class OverlayPanelController {
         keyMonitor = nil
     }
 
-    /// Returns true if the event was consumed (should not reach the text field).
+    /// Returns true if the event was consumed.
     private func handle(_ event: NSEvent) -> Bool {
         let isCommand = event.modifierFlags.contains(.command)
 
         switch event.keyCode {
-        case Key.escape:
-            hide()
+        case KeyCode.escape:
+            // Two-stage: back out of a focused term first, then dismiss.
+            if appState.mode == .detail { appState.returnToList() } else { hide() }
             return true
 
-        case Key.arrowDown:
+        case KeyCode.arrowDown:
             if appState.mode == .detail { appState.returnToList() }
             appState.moveSelection(by: 1)
             return true
 
-        case Key.arrowUp:
+        case KeyCode.arrowUp:
             if appState.mode == .detail { appState.returnToList() }
             appState.moveSelection(by: -1)
             return true
 
-        case Key.returnKey, Key.keypadEnter:
-            if appState.mode == .list { appState.focusSelected() }
-            else { appState.toggleAnalogy() }
+        case KeyCode.returnKey, KeyCode.keypadEnter:
+            if appState.mode == .list { appState.focusSelected() } else { appState.toggleAnalogy() }
             return true
 
-        case Key.space where appState.mode == .detail:
+        case KeyCode.space where appState.mode == .detail:
             appState.toggleAnalogy()
             return true
 
-        case Key.d where isCommand:
+        case KeyCode.d where isCommand:
             appState.toggleDeepDive()
             return true
 
-        case Key.c where isCommand:
-            if let text = appState.copyText() {
-                NSPasteboard.general.clearContents()
-                NSPasteboard.general.setString(text, forType: .string)
-            }
+        case KeyCode.c where isCommand:
+            copyActiveTerm(appState)
             return true
 
         default:
-            // Everything else (letters, space-in-list-mode, backspace) flows to
-            // the search field, whose binding calls AppState.setQuery → List mode.
             return false
         }
     }
+}
+
+/// Virtual key codes (US layout), shared by the overlay and mini controllers.
+enum KeyCode {
+    static let escape: UInt16 = 53
+    static let returnKey: UInt16 = 36
+    static let keypadEnter: UInt16 = 76
+    static let space: UInt16 = 49
+    static let arrowUp: UInt16 = 126
+    static let arrowDown: UInt16 = 125
+    static let d: UInt16 = 2
+    static let c: UInt16 = 8
+}
+
+/// Copies the active term's formatted block to the pasteboard.
+func copyActiveTerm(_ appState: AppState) {
+    guard let text = appState.copyText() else { return }
+    NSPasteboard.general.clearContents()
+    NSPasteboard.general.setString(text, forType: .string)
 }

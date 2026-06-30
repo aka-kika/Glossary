@@ -10,11 +10,11 @@ struct TermDetailView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 10) {
                 Text(term.term)
-                    .font(.system(size: 24, weight: .bold))
+                    .font(.system(.title3, weight: .semibold))
                     .foregroundStyle(Theme.fg)
-                    .padding(.bottom, 2)
+                    .padding(.bottom, 1)
 
                 // Level 1 — always visible.
                 DisclosureBlock(title: "What It Is", text: term.whatItIs, accent: Theme.whatItIsAccent)
@@ -33,7 +33,7 @@ struct TermDetailView: View {
                         .transition(.disclosure)
                 }
             }
-            .padding(18)
+            .padding(14)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .animation(.easeOut(duration: 0.16), value: state.isAnalogyShown)

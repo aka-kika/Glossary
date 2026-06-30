@@ -30,9 +30,15 @@ as **not done** until its docs are updated.
 - **`GlossaryCore`** (library) — pure, fully unit-tested logic: `Term`, `Glossary`
   (JSON loader), `FuzzyMatcher`, `AppState` (modes + disclosure levels), `TermFormatter`.
 - **`Glossary`** (executable) — AppKit shell: `NSStatusItem`, `OverlayPanelController`
-  (floating `NSPanel`), `GlobalHotkey` (Carbon `RegisterEventHotKey`), SwiftUI views.
-- Two keyboard modes — **List** (typing/arrows) and **Detail** (Space/⌘D/⌘C). See spec §3.
-- Brand: **KIKA** dark palette. Accent `#6D80A6`, bg `#2C2D2F`, fg `#E7E5E0`. See spec §6.
+  (floating `NSPanel`) and `MiniPopoverController` (menu-bar `NSPopover`),
+  `GlobalHotkey` (Carbon `RegisterEventHotKey`), `Settings` (UserDefaults store) +
+  `SettingsView`/`SettingsWindowController`, SwiftUI views. `AppDelegate` routes
+  summon to the configured presentation mode and re-registers the hotkey on change.
+- Two keyboard modes — **List** (typing/arrows) and **Detail** (Space/⌘D/⌘C). `Esc`
+  is two-stage (Back from a term, then close). See spec §3.
+- Default hotkey **⌥Esc** (rebindable in Settings). Presentation: Overlay or Mini.
+- Brand: **KIKA** palette, dynamic light/dark tokens in `Theme.swift`. Accent
+  `#6D80A6`; dark bg `#2C2D2F` / fg `#E7E5E0`. See spec §6.
 
 ## Commands
 
