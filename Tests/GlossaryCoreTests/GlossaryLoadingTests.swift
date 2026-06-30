@@ -5,10 +5,10 @@ import Foundation
 @Suite("Glossary loading")
 struct GlossaryLoadingTests {
 
-    @Test("Bundled glossary decodes all 24 seed terms")
+    @Test("Bundled glossary decodes all 54 seed terms")
     func loadsBundled() throws {
         let glossary = try Glossary.loadBundled()
-        #expect(glossary.terms.count == 24)
+        #expect(glossary.terms.count == 54)
     }
 
     @Test("Every term has all required, non-empty fields")

@@ -190,5 +190,245 @@
     "analogy": "A live theater. The frontend includes lighting, stages, and visible cast. The backend covers gears and scaffolding.",
     "whyItMatters": "It permits graphic engineers to build interface experiences while software engineers harden data architectures.",
     "example": "Buttons and interactive color animations are Frontend; server query matching inside MongoDB is Backend."
+  },
+  {
+    "id": "cache",
+    "term": "Cache",
+    "whatItIs": "A temporary storage spot that keeps frequently used data close for instant reuse.",
+    "analogy": "Keeping your most-used spices on the counter instead of walking to the pantry each time.",
+    "whyItMatters": "It dramatically speeds up apps by avoiding repeated trips to fetch the same data.",
+    "example": "Your browser saving a website's logo so it loads instantly on your next visit."
+  },
+  {
+    "id": "cookie",
+    "term": "Cookie",
+    "whatItIs": "A small text file a website stores in your browser to remember you between visits.",
+    "analogy": "A coat-check ticket the site hands you so it recognizes you when you come back.",
+    "whyItMatters": "It keeps you logged in and remembers your preferences without asking every time.",
+    "example": "Staying signed into your email after closing and reopening the tab."
+  },
+  {
+    "id": "cdn",
+    "term": "CDN (Content Delivery Network)",
+    "whatItIs": "A worldwide network of servers that delivers web content from the location nearest you.",
+    "analogy": "A chain of local warehouses, so your package ships from the closest one, not across the country.",
+    "whyItMatters": "It makes websites load fast for everyone, no matter where in the world they are.",
+    "example": "A video streaming smoothly because it's served from a server in your own city."
+  },
+  {
+    "id": "load-balancer",
+    "term": "Load Balancer",
+    "whatItIs": "A traffic director that spreads incoming requests evenly across multiple servers.",
+    "analogy": "A host at a busy restaurant sending guests to whichever waiter has the fewest tables.",
+    "whyItMatters": "It keeps a popular site from crashing by never overwhelming a single server.",
+    "example": "A shopping site staying online during a flash sale by splitting shoppers across servers."
+  },
+  {
+    "id": "kubernetes",
+    "term": "Kubernetes",
+    "whatItIs": "A system that automatically runs, scales, and heals large fleets of containers.",
+    "analogy": "An air-traffic controller for shipping containers, deciding where each one lands and restarts.",
+    "whyItMatters": "It lets huge apps stay running smoothly without humans babysitting every server.",
+    "example": "Automatically launching extra app copies when traffic spikes, then shutting them down later."
+  },
+  {
+    "id": "cloud",
+    "term": "Cloud Computing",
+    "whatItIs": "Renting computing power and storage over the internet instead of owning the hardware.",
+    "analogy": "Using electricity from the grid instead of running your own generator in the basement.",
+    "whyItMatters": "It lets anyone scale from a tiny app to millions of users without buying machines.",
+    "example": "Hosting your photos on a service so they're available on every device."
+  },
+  {
+    "id": "open-source",
+    "term": "Open Source",
+    "whatItIs": "Software whose code is published publicly for anyone to read, use, and improve.",
+    "analogy": "A community recipe everyone can cook, tweak, and share back with their improvements.",
+    "whyItMatters": "It speeds up innovation and lets developers build on each other's work freely.",
+    "example": "The Linux operating system, maintained by thousands of volunteers worldwide."
+  },
+  {
+    "id": "repository",
+    "term": "Repository (Repo)",
+    "whatItIs": "A central storage folder holding a project's code and its entire change history.",
+    "analogy": "A shared filing cabinet that also remembers every edit anyone has ever made.",
+    "whyItMatters": "It's the single source of truth a whole team works from without losing track.",
+    "example": "A GitHub project page where all the code and its versions live."
+  },
+  {
+    "id": "pull-request",
+    "term": "Pull Request",
+    "whatItIs": "A proposal to merge your code changes into the main project for review first.",
+    "analogy": "Submitting an edited document for your editor's approval before it goes to print.",
+    "whyItMatters": "It lets teammates review and discuss changes before they affect everyone.",
+    "example": "Asking the team to look over your new feature before it's added to the app."
+  },
+  {
+    "id": "compiler",
+    "term": "Compiler",
+    "whatItIs": "A translator that turns human-readable code into instructions a computer can run.",
+    "analogy": "A translator converting a finished novel into a language the machine reads fluently.",
+    "whyItMatters": "Without it, the code developers write would be meaningless to the actual processor.",
+    "example": "Turning Swift source files into the app that runs on your Mac."
+  },
+  {
+    "id": "algorithm",
+    "term": "Algorithm",
+    "whatItIs": "A precise step-by-step recipe for solving a problem or completing a task.",
+    "analogy": "A cooking recipe: exact steps in order that reliably produce the same dish.",
+    "whyItMatters": "It's the core logic that decides how software actually gets things done.",
+    "example": "The steps a map app follows to find the fastest route to your destination."
+  },
+  {
+    "id": "oauth",
+    "term": "OAuth",
+    "whatItIs": "A standard that lets one app access your account on another without your password.",
+    "analogy": "A valet key that starts the car but won't open the glovebox or trunk.",
+    "whyItMatters": "It lets you grant limited access safely instead of handing over your real password.",
+    "example": "Letting a design app post to your social account via a 'Connect' button."
+  },
+  {
+    "id": "token",
+    "term": "Access Token",
+    "whatItIs": "A temporary digital pass that proves you're allowed to use a service.",
+    "analogy": "A wristband at a festival that gets you in without showing your ID at every stage.",
+    "whyItMatters": "It keeps you authenticated across requests without resending your password each time.",
+    "example": "The hidden key your app sends with each request to prove you're logged in."
+  },
+  {
+    "id": "latency",
+    "term": "Latency",
+    "whatItIs": "The delay between asking for something and starting to receive the response.",
+    "analogy": "The pause between flipping a light switch and the bulb actually turning on.",
+    "whyItMatters": "High latency makes apps feel sluggish even when everything else is fast.",
+    "example": "The lag you feel in a video call when someone's reply arrives a second late."
+  },
+  {
+    "id": "firewall",
+    "term": "Firewall",
+    "whatItIs": "A security barrier that filters network traffic, blocking anything untrusted.",
+    "analogy": "A nightclub bouncer who only lets approved guests through the door.",
+    "whyItMatters": "It shields your network and devices from malicious or unwanted connections.",
+    "example": "Blocking a suspicious program from secretly sending your data to the internet."
+  },
+  {
+    "id": "vpn",
+    "term": "VPN (Virtual Private Network)",
+    "whatItIs": "An encrypted tunnel that routes your internet traffic through a private server.",
+    "analogy": "Mailing your letters inside a sealed diplomatic pouch nobody else can open or trace.",
+    "whyItMatters": "It protects your privacy and lets you browse securely on untrusted networks.",
+    "example": "Safely checking your bank on coffee-shop Wi-Fi without exposing your activity."
+  },
+  {
+    "id": "ip-address",
+    "term": "IP Address",
+    "whatItIs": "A unique numerical label that identifies a device on a network.",
+    "analogy": "A mailing address that tells the internet exactly where to deliver your data.",
+    "whyItMatters": "Without it, computers couldn't find each other to send information back and forth.",
+    "example": "The number behind a website name that your browser actually connects to."
+  },
+  {
+    "id": "port",
+    "term": "Port",
+    "whatItIs": "A numbered doorway on a computer that directs network traffic to the right program.",
+    "analogy": "Apartment numbers at one street address, so mail reaches the correct resident.",
+    "whyItMatters": "It lets a single machine run many services without their traffic getting mixed up.",
+    "example": "A local web server running on port 3000 while a database listens on another."
+  },
+  {
+    "id": "runtime",
+    "term": "Runtime",
+    "whatItIs": "The environment that actively runs your program while it's executing.",
+    "analogy": "The stage, lights, and crew that bring a script to life during a live performance.",
+    "whyItMatters": "It provides the resources and rules your code needs to actually run.",
+    "example": "Node.js running your JavaScript outside of a web browser."
+  },
+  {
+    "id": "cli",
+    "term": "CLI (Command Line Interface)",
+    "whatItIs": "A text-based way to control a computer by typing commands instead of clicking.",
+    "analogy": "Ordering exactly what you want by speaking to the chef, not pointing at a picture menu.",
+    "whyItMatters": "It's faster and more precise for developers automating and controlling systems.",
+    "example": "Typing commands in Terminal to create folders, run apps, or deploy code."
+  },
+  {
+    "id": "serverless",
+    "term": "Serverless",
+    "whatItIs": "Running code on demand without managing any servers yourself.",
+    "analogy": "Taking a taxi instead of buying, parking, and maintaining your own car.",
+    "whyItMatters": "You only pay when your code runs and never worry about the underlying machines.",
+    "example": "A function that resizes an image only when a user uploads one, then stops."
+  },
+  {
+    "id": "rest",
+    "term": "REST",
+    "whatItIs": "A popular set of rules for designing web APIs around simple, predictable actions.",
+    "analogy": "A standardized restaurant menu where every dish is ordered the same clear way.",
+    "whyItMatters": "Its consistency makes APIs easy for different developers to understand and use.",
+    "example": "Fetching a user's profile with a simple, structured web request."
+  },
+  {
+    "id": "graphql",
+    "term": "GraphQL",
+    "whatItIs": "An API query language that lets clients request exactly the data they need.",
+    "analogy": "A build-your-own-bowl counter where you pick only the ingredients you want.",
+    "whyItMatters": "It avoids over-fetching by returning precisely the fields requested, nothing extra.",
+    "example": "An app asking for just a user's name and avatar in a single tailored request."
+  },
+  {
+    "id": "microservices",
+    "term": "Microservices",
+    "whatItIs": "An architecture that splits an app into many small, independent services.",
+    "analogy": "A food court of specialized stalls instead of one giant kitchen doing everything.",
+    "whyItMatters": "Teams can build, scale, and fix each piece without breaking the whole app.",
+    "example": "Separate services for payments, search, and notifications in one shopping app."
+  },
+  {
+    "id": "schema",
+    "term": "Schema",
+    "whatItIs": "The blueprint that defines how data is structured and what shape it must take.",
+    "analogy": "A blank tax form with labeled boxes dictating exactly what goes where.",
+    "whyItMatters": "It keeps stored data consistent and predictable so software can rely on it.",
+    "example": "Defining that every user record must have an email and a creation date."
+  },
+  {
+    "id": "ssh",
+    "term": "SSH (Secure Shell)",
+    "whatItIs": "An encrypted way to securely log into and control a remote computer over a network.",
+    "analogy": "A secure remote control with an unbreakable lock between you and a distant machine.",
+    "whyItMatters": "It lets developers safely manage servers from anywhere without exposing passwords.",
+    "example": "Connecting from your laptop to a cloud server to restart an app."
+  },
+  {
+    "id": "regex",
+    "term": "Regex (Regular Expression)",
+    "whatItIs": "A compact pattern language for finding and matching text.",
+    "analogy": "A super-powered 'find' tool that searches by shape and rules, not just exact words.",
+    "whyItMatters": "It makes searching, validating, and transforming text fast and precise.",
+    "example": "Checking that a typed email address actually looks like a valid email."
+  },
+  {
+    "id": "async",
+    "term": "Asynchronous",
+    "whatItIs": "Doing work in the background so a program doesn't freeze while it waits.",
+    "analogy": "Putting laundry in the machine and cooking dinner instead of staring at the spin cycle.",
+    "whyItMatters": "It keeps apps responsive while slow tasks like network calls finish.",
+    "example": "A page staying clickable while it quietly loads new posts in the background."
+  },
+  {
+    "id": "session",
+    "term": "Session",
+    "whatItIs": "A temporary record of your activity and identity during a single visit to a service.",
+    "analogy": "A tab the bartender keeps open for you until you leave for the night.",
+    "whyItMatters": "It lets a site remember who you are as you move from page to page.",
+    "example": "Staying logged in as you browse different pages until you sign out."
+  },
+  {
+    "id": "backup",
+    "term": "Backup",
+    "whatItIs": "A saved copy of data kept separately so it can be restored if the original is lost.",
+    "analogy": "A spare house key hidden with a trusted neighbor in case you lose yours.",
+    "whyItMatters": "It protects you from disaster when files are deleted, corrupted, or hacked.",
+    "example": "A nightly copy of a database stored elsewhere so nothing is lost in a crash."
   }
 ]

@@ -7,6 +7,9 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [Unreleased]
 
 ### Added
+- Expanded the seed glossary from **24 to 54 terms** (added cache, cookie, CDN,
+  load balancer, Kubernetes, cloud, OAuth, REST, GraphQL, microservices, SSH,
+  regex, async, and more) so there's more to search and scroll while testing.
 - **Settings window** (menu bar → Settings…, or ⌘,) backed by UserDefaults:
   rebindable summon hotkey, window style, panel size, theme, launch at login,
   clipboard auto-load, and Reset to Defaults.
@@ -22,6 +25,10 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   to the result list; from the list it dismisses (footer hint shows Back/Close).
 
 ### Changed
+- **Disclosure is now a single-key Space stepper** instead of Space (Analogy) +
+  `Cmd+D` (deep dive). Each Space opens the next block (Analogy → Why It Matters →
+  Example); once all are open, each press closes the last one, then it cycles.
+  `Cmd+D` was removed.
 - Typography now uses **system text styles** (`.title3`, `.body`, `.callout`,
   `.caption2`, …) instead of fixed large point sizes, so it follows the OS and
   feels less oversized; paddings tightened throughout.

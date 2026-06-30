@@ -17,9 +17,17 @@ public final class AppState: ObservableObject {
     @Published public private(set) var mode: Mode = .list
     @Published public private(set) var focusedTerm: Term? = nil
 
-    /// Independent disclosure toggles (the two hotkeys are independent).
-    @Published public private(set) var isAnalogyShown: Bool = false   // Level 2 (Space/Enter)
-    @Published public private(set) var isDeepDiveShown: Bool = false  // Level 3 (Cmd+D)
+    /// Single-key progressive disclosure. `revealCount` optional blocks are shown,
+    /// in order: Analogy (1), Why It Matters (2), Example (3). `Space` steps it —
+    /// opening the next block until all are open, then closing them one by one,
+    /// then cycling. See `stepDisclosure()`.
+    @Published public private(set) var revealCount: Int = 0
+    private var disclosureClosing = false
+    public static let maxReveal = 3
+
+    public var isAnalogyShown: Bool { revealCount >= 1 }
+    public var isWhyShown: Bool { revealCount >= 2 }
+    public var isExampleShown: Bool { revealCount >= 3 }
 
     /// Bumped to ask the UI to (re)focus the search field on each summon.
     @Published public private(set) var focusRequestID: Int = 0
@@ -69,22 +77,29 @@ public final class AppState: ObservableObject {
 
     // MARK: - Detail mode
 
-    public func toggleAnalogy() {
+    /// Advance single-key disclosure one step (`Space`). Opens the next block;
+    /// once all are open, each press closes the last-opened block, then it cycles.
+    public func stepDisclosure() {
         guard mode == .detail else { return }
-        isAnalogyShown.toggle()
-    }
-
-    public func toggleDeepDive() {
-        guard mode == .detail else { return }
-        isDeepDiveShown.toggle()
+        if disclosureClosing {
+            revealCount -= 1
+            if revealCount <= 0 { revealCount = 0; disclosureClosing = false }
+        } else {
+            revealCount += 1
+            if revealCount >= Self.maxReveal { revealCount = Self.maxReveal; disclosureClosing = true }
+        }
     }
 
     /// Leave Detail mode, returning to the result list (keeps query/results).
     public func returnToList() {
         mode = .list
         focusedTerm = nil
-        isAnalogyShown = false
-        isDeepDiveShown = false
+        resetDisclosure()
+    }
+
+    private func resetDisclosure() {
+        revealCount = 0
+        disclosureClosing = false
     }
 
     /// Formatted text of the active term for `Cmd+C`, or `nil` if none.
@@ -107,8 +122,7 @@ public final class AppState: ObservableObject {
         selectionIndex = 0
         mode = .list
         focusedTerm = nil
-        isAnalogyShown = false
-        isDeepDiveShown = false
+        resetDisclosure()
     }
 
     /// On summon: resolve the clipboard string to a term, if it cleanly matches.
@@ -137,8 +151,7 @@ public final class AppState: ObservableObject {
     private func focus(_ term: Term) {
         focusedTerm = term
         mode = .detail
-        isAnalogyShown = false
-        isDeepDiveShown = false
+        resetDisclosure()
         if let idx = results.firstIndex(of: term) {
             selectionIndex = idx
         }

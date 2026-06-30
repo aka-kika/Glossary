@@ -84,22 +84,24 @@ term. Resolved with two modes rather than heuristics:
   - `↑` / `↓` → move highlight through results.
   - `Enter` → focus highlighted term → **Detail mode** (text field resigns).
 - **Detail mode** — text field is *not* first responder.
-  - `Space` / `Enter` → toggle **Level 2 (Analogy)**.
-  - `Cmd+D` → toggle **Level 3 (Why It Matters + Example)**.
+  - `Space` / `Enter` → **step disclosure**: open the next block (Analogy → Why It
+    Matters → Example); once all are open, each press closes the last-opened block,
+    then it cycles. Single-key, no `Cmd+D`.
   - `Cmd+C` → copy formatted block of the active term.
   - Any character or `↑` / `↓` → return to **List mode** and apply.
 - **`Escape`** is two-stage: from Detail mode it returns to the list (Back); from
   List mode it dismisses + clears all state. The summon hotkey always toggles/hides.
 
-### Progressive disclosure
+### Progressive disclosure (single-key stepper)
 
-Two **independent** boolean toggles on `AppState` (the two hotkeys are independent):
-- **Level 1** — title block + "What It Is" — always visible when a term is focused.
-- **`isAnalogyShown`** (Level 2, `Space`/`Enter`) — reveals "Analogy".
-- **`isDeepDiveShown`** (Level 3, `Cmd+D`) — reveals "Why It Matters" + "Example".
+`AppState.revealCount` (0…3) drives an ordered, `Space`-stepped accordion:
+- **Always** — title block + "What It Is".
+- `revealCount ≥ 1` — "Analogy"; `≥ 2` — "Why It Matters"; `≥ 3` — "Example".
 
-Either can be on without the other; each hotkey flips its own block. Focusing a new
-term (or returning to the list) resets both to hidden.
+`stepDisclosure()` (Space/Enter) opens the next block until all three are open, then
+reverses and closes them one at a time (Example first), then cycles. Focusing a new
+term or returning to the list resets it to 0. `Cmd+D` was removed in favour of the
+single-key flow.
 
 ---
 
@@ -126,10 +128,12 @@ struct Term: Codable, Identifiable, Hashable {
 }
 ```
 
-Seeded from the user's 24 tech terms (Framework, Proxy, HTTP, HTTPS, Interface, VPS,
-MCP Server, MCP Tunnel, SDK, ACP, CI, MongoDB, API, JSON, Webhook, Environment
-Variables, Middleware, Docker, Git, Deployment, Encryption, DNS, Endpoint,
-Frontend vs. Backend). Flat list — no module grouping in v1.
+Seeded from the user's original 24 tech terms (Framework, Proxy, HTTP, HTTPS,
+Interface, VPS, MCP Server, MCP Tunnel, SDK, ACP, CI, MongoDB, API, JSON, Webhook,
+Environment Variables, Middleware, Docker, Git, Deployment, Encryption, DNS, Endpoint,
+Frontend vs. Backend), since expanded to **54** with common web/dev/networking terms
+(cache, cookie, CDN, load balancer, Kubernetes, cloud, OAuth, REST, GraphQL,
+microservices, SSH, regex, async, and more). Flat list — no module grouping in v1.
 
 ---
 
@@ -184,7 +188,7 @@ dive   ⌘C copy   esc close`).
 
 Unit-tested (pure logic, no UI):
 - `FuzzyMatcher` — ordering, subsequence matching, empty query, no-match.
-- `Glossary` — decodes all 24 terms; required keys present.
+- `Glossary` — decodes all 54 terms; required keys present.
 - `AppState.resolve(clipboard:)` — exact / fuzzy / miss / case-insensitive.
 - `AppState` transitions — list↔detail mode, independent disclosure toggles, dismiss reset.
 - `TermFormatter` — clipboard text shape for a known term.

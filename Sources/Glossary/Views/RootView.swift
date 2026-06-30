@@ -50,8 +50,7 @@ private struct HintFooter: View {
     var body: some View {
         HStack(spacing: 16) {
             if state.mode == .detail {
-                hint("space", "Analogy")
-                hint("⌘D", "Deep dive")
+                hint("space", "Expand")
                 hint("⌘C", "Copy")
             } else {
                 hint("↑↓", "Navigate")

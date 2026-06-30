@@ -16,19 +16,19 @@ struct TermDetailView: View {
                     .foregroundStyle(Theme.fg)
                     .padding(.bottom, 1)
 
-                // Level 1 — always visible.
+                // Always visible.
                 DisclosureBlock(title: "What It Is", text: term.whatItIs, accent: Theme.whatItIsAccent)
 
-                // Level 2 — Analogy.
+                // Revealed one Space-press at a time, in order.
                 if state.isAnalogyShown {
                     DisclosureBlock(title: "Analogy", text: term.analogy, accent: Theme.analogyAccent)
                         .transition(.disclosure)
                 }
-
-                // Level 3 — Why It Matters + Example.
-                if state.isDeepDiveShown {
+                if state.isWhyShown {
                     DisclosureBlock(title: "Why It Matters", text: term.whyItMatters, accent: Theme.whyAccent)
                         .transition(.disclosure)
+                }
+                if state.isExampleShown {
                     DisclosureBlock(title: "Example", text: term.example, accent: Theme.exampleAccent)
                         .transition(.disclosure)
                 }
@@ -36,8 +36,7 @@ struct TermDetailView: View {
             .padding(14)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .animation(.easeOut(duration: 0.16), value: state.isAnalogyShown)
-        .animation(.easeOut(duration: 0.16), value: state.isDeepDiveShown)
+        .animation(.easeOut(duration: 0.16), value: state.revealCount)
     }
 }
 

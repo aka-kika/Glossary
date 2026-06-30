@@ -50,35 +50,37 @@ struct AppStateTests {
         s.focusSelected()
         #expect(s.mode == .detail)
         #expect(s.focusedTerm?.id == "dns")
-        #expect(s.isAnalogyShown == false)
-        #expect(s.isDeepDiveShown == false)
+        #expect(s.revealCount == 0)
     }
 
-    @Test("Disclosure toggles are independent and only work in detail mode")
-    func disclosureToggles() {
+    @Test("Space steps disclosure open then closed in a cycle")
+    func disclosureStepper() {
         let s = makeState()
-        s.toggleAnalogy()                 // ignored in list mode
-        #expect(s.isAnalogyShown == false)
+        s.stepDisclosure()                // ignored in list mode
+        #expect(s.revealCount == 0)
 
         s.focusSelected()
-        s.toggleDeepDive()
-        #expect(s.isDeepDiveShown == true)
-        #expect(s.isAnalogyShown == false)   // independent
-        s.toggleAnalogy()
-        #expect(s.isAnalogyShown == true)
-        s.toggleAnalogy()
-        #expect(s.isAnalogyShown == false)
+        // Open one block per press, in order.
+        s.stepDisclosure(); #expect(s.revealCount == 1 && s.isAnalogyShown)
+        s.stepDisclosure(); #expect(s.revealCount == 2 && s.isWhyShown)
+        s.stepDisclosure(); #expect(s.revealCount == 3 && s.isExampleShown)
+        // All open — now each press closes the last-opened block.
+        s.stepDisclosure(); #expect(s.revealCount == 2 && !s.isExampleShown)
+        s.stepDisclosure(); #expect(s.revealCount == 1)
+        s.stepDisclosure(); #expect(s.revealCount == 0)
+        // Cycles back to opening.
+        s.stepDisclosure(); #expect(s.revealCount == 1)
     }
 
     @Test("returnToList exits detail and clears disclosure")
     func returnToList() {
         let s = makeState()
         s.focusSelected()
-        s.toggleAnalogy()
+        s.stepDisclosure()
         s.returnToList()
         #expect(s.mode == .list)
         #expect(s.focusedTerm == nil)
-        #expect(s.isAnalogyShown == false)
+        #expect(s.revealCount == 0)
     }
 
     @Test("copyText returns formatted text for the active term")

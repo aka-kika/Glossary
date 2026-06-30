@@ -26,8 +26,7 @@ mouse.
 | Type | Fuzzy-filter terms (List mode) |
 | `↑` / `↓` | Move through results |
 | `Enter` | Focus the highlighted term |
-| `Space` / `Enter` | Toggle **Analogy** (Level 2) |
-| `Cmd+D` | Toggle **Why It Matters + Example** (Level 3) |
+| `Space` | **Step disclosure** — open the next block (Analogy → Why It Matters → Example); once all open, each press closes one, then cycles |
 | `Cmd+C` | Copy the active term |
 | `Escape` | **Back** to the list from a term, or dismiss from the list |
 

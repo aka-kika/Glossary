@@ -147,15 +147,11 @@ final class OverlayPanelController {
             return true
 
         case KeyCode.returnKey, KeyCode.keypadEnter:
-            if appState.mode == .list { appState.focusSelected() } else { appState.toggleAnalogy() }
+            if appState.mode == .list { appState.focusSelected() } else { appState.stepDisclosure() }
             return true
 
         case KeyCode.space where appState.mode == .detail:
-            appState.toggleAnalogy()
-            return true
-
-        case KeyCode.d where isCommand:
-            appState.toggleDeepDive()
+            appState.stepDisclosure()
             return true
 
         case KeyCode.c where isCommand:
