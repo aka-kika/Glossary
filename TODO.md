@@ -65,9 +65,12 @@ Living task list. Check items off as they land; add follow-ups as you find them.
 - [x] `AppState.updateTerms` for runtime reload; usage survives by term id
 - [x] Smart merge of new built-ins on update (keeps edits; respects deletions)
 
+## v1.3 — branding (done)
+- [x] App icon wired into the bundle (icns generated from Resources/AppIcon.png)
+- [x] Matching menu-bar `{ / }` glyph (StatusItemIcon template)
+
 ## Later (deferred)
 - [ ] Optional in-app "Add Term" form (vs. editing the JSON file)
 - [ ] Free-form hotkey recorder (vs. preset list)
 - [ ] Modules / categories grouping
 - [ ] Bundle Fira Sans/Code brand fonts
-- [ ] App icon

@@ -7,6 +7,12 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [Unreleased]
 
 ### Added
+- **App icon** (dark open book with `{ / }` code braces). `scripts/build-app.sh`
+  generates `AppIcon.icns` (16–1024px) from `Resources/AppIcon.png` and sets
+  `CFBundleIconFile`.
+- **Matching menu-bar glyph** — a monochrome `{ / }` (`StatusItemIcon`, drawn in
+  code as a resolution-independent template) echoing the icon, replacing the
+  previous `character.book.closed` SF Symbol.
 - **Editable glossary file** — on first run the app seeds
   `~/Library/Application Support/Glossary/glossary.json` from the built-in terms,
   then loads from it, so you can add terms without rebuilding. Settings gains a
@@ -40,7 +46,15 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - **Back navigation** — `Esc` is now two-stage: from a focused term it returns
   to the result list; from the list it dismisses (footer hint shows Back/Close).
 
+### Added
+- Menu-bar menu polish: **Show Glossary** now displays the current summon hotkey
+  and the app's `{ / }` glyph; Settings and Quit got icons too.
+
 ### Changed
+- **Overlay hugs its content, instantly** — a focused term sizes to its visible
+  blocks so there's no dead space, the window resizes with **no animation**, and the
+  block reveal is now **instant** (the slide-in was the distracting part). The list
+  keeps a stable height so typing doesn't resize the window.
 - **Disclosure is now a single-key Space stepper** instead of Space (Analogy) +
   `Cmd+D` (deep dive). Each Space opens the next block (Analogy → Why It Matters →
   Example); once all are open, each press closes the last one, then it cycles.

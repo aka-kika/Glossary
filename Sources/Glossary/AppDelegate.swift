@@ -6,6 +6,7 @@ import GlossaryCore
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private let settings = Settings.shared
     private var statusItem: NSStatusItem!
+    private var showItem: NSMenuItem!
     private var overlay: OverlayPanelController!
     private var mini: MiniPopoverController!
     private let settingsWindow = SettingsWindowController()
@@ -58,21 +59,42 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func setupStatusItem() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         if let button = statusItem.button {
-            button.image = NSImage(
-                systemSymbolName: "character.book.closed",
-                accessibilityDescription: "Glossary"
-            )
-            button.image?.isTemplate = true
+            button.image = StatusItemIcon.image()           // matches the app icon's { / }
+            button.image?.accessibilityDescription = "Glossary"
         }
 
         let menu = NSMenu()
-        menu.addItem(withTitle: "Show Glossary", action: #selector(showFromMenu), keyEquivalent: "")
+
+        showItem = NSMenuItem(title: "Show Glossary", action: #selector(showFromMenu), keyEquivalent: "")
+        showItem.image = StatusItemIcon.image(size: 16)              // the app's { / } glyph
+        updateShowShortcut()
+        menu.addItem(showItem)
+
         let settingsItem = NSMenuItem(title: "Settings…", action: #selector(openSettings), keyEquivalent: ",")
+        settingsItem.image = menuSymbol("gearshape")
         menu.addItem(settingsItem)
+
         menu.addItem(.separator())
-        menu.addItem(NSMenuItem(title: "Quit Glossary", action: #selector(quit), keyEquivalent: "q"))
+
+        let quitItem = NSMenuItem(title: "Quit Glossary", action: #selector(quit), keyEquivalent: "q")
+        quitItem.image = menuSymbol("power")
+        menu.addItem(quitItem)
+
         for item in menu.items { item.target = self }
         statusItem.menu = menu
+    }
+
+    /// Shows the currently-configured summon hotkey beside "Show Glossary".
+    private func updateShowShortcut() {
+        let hk = settings.hotkey
+        showItem?.keyEquivalent = hk.menuKeyEquivalent
+        showItem?.keyEquivalentModifierMask = hk.menuModifierFlags
+    }
+
+    private func menuSymbol(_ name: String) -> NSImage? {
+        let image = NSImage(systemSymbolName: name, accessibilityDescription: nil)
+        image?.isTemplate = true
+        return image
     }
 
     // MARK: - Hotkey
@@ -104,7 +126,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func observeSettings() {
         settings.$hotkeyID
             .dropFirst()
-            .sink { [weak self] _ in self?.registerHotkey() }
+            .sink { [weak self] _ in
+                self?.registerHotkey()
+                self?.updateShowShortcut()
+            }
             .store(in: &cancellables)
 
         settings.$launchAtLogin

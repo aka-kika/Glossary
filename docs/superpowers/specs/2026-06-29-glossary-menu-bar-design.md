@@ -187,9 +187,13 @@ behind the header label, not full fills):
 | Why It Matters | Coral | `#FF8A80` |
 | Example | Dusty Lilac | `#9B8FA6` |
 
-Layout: ~640pt-wide panel, search bar on top, results list (List mode) or focused
-term detail (Detail mode) below. Subtle keyboard-hint footer (`␣ analogy   ⌘D deep
-dive   ⌘C copy   esc close`).
+Layout: fixed width from the preset (520/640/760), search bar on top, results list
+(List mode) or focused term detail (Detail mode) below, then a keyboard-hint footer.
+The window **hugs its content height instantly** — Detail sizes to the visible blocks
+(no dead space, anchored top, clamped on-screen) and block reveal is instant (no
+animation, by request). List mode keeps a stable height (`preset.height − chrome`) so
+typing doesn't resize it. `OverlayPanelController` re-fits on each `AppState` change
+via `NSHostingView.fittingSize` with `animate: false`.
 
 ---
 

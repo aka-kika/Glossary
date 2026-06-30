@@ -31,6 +31,29 @@ mkdir -p "${MACOS}" "${RES}"
 
 cp "${EXEC}" "${MACOS}/${APP_NAME}"
 
+# App icon: build AppIcon.icns from Resources/AppIcon.png.
+ICON_SRC="Resources/AppIcon.png"
+HAS_ICON=0
+if [ -f "${ICON_SRC}" ]; then
+  ICONSET="$(mktemp -d)/AppIcon.iconset"
+  mkdir -p "${ICONSET}"
+  gen() { sips -z "$1" "$1" "${ICON_SRC}" --out "${ICONSET}/$2" >/dev/null; }
+  gen 16   icon_16x16.png
+  gen 32   icon_16x16@2x.png
+  gen 32   icon_32x32.png
+  gen 64   icon_32x32@2x.png
+  gen 128  icon_128x128.png
+  gen 256  icon_128x128@2x.png
+  gen 256  icon_256x256.png
+  gen 512  icon_256x256@2x.png
+  gen 512  icon_512x512.png
+  gen 1024 icon_512x512@2x.png
+  if iconutil -c icns "${ICONSET}" -o "${RES}/AppIcon.icns" 2>/dev/null; then
+    HAS_ICON=1
+    echo "  • generated AppIcon.icns"
+  fi
+fi
+
 # Copy the SwiftPM resource bundle so Bundle.module resolves inside the .app.
 RES_BUNDLE="$(find "${BIN_PATH}" -maxdepth 1 -name '*.bundle' -print -quit || true)"
 if [ -n "${RES_BUNDLE}" ]; then
@@ -39,6 +62,9 @@ if [ -n "${RES_BUNDLE}" ]; then
 else
   echo "✗ Resource bundle (glossary.json) not found — aborting."; exit 1
 fi
+
+ICON_KEY=""
+[ "${HAS_ICON}" = "1" ] && ICON_KEY="    <key>CFBundleIconFile</key>      <string>AppIcon</string>"
 
 cat > "${CONTENTS}/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
@@ -52,6 +78,7 @@ cat > "${CONTENTS}/Info.plist" <<PLIST
     <key>CFBundlePackageType</key>     <string>APPL</string>
     <key>CFBundleShortVersionString</key> <string>${VERSION}</string>
     <key>CFBundleVersion</key>         <string>${BUILD}</string>
+${ICON_KEY}
     <key>LSMinimumSystemVersion</key>  <string>14.0</string>
     <key>LSUIElement</key>             <true/>
     <key>NSHighResolutionCapable</key> <true/>

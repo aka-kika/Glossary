@@ -44,6 +44,8 @@ as **not done** until its docs are updated.
   and Settings exposes it. Bundled JSON is just the seed.
 - Brand: **KIKA** palette, dynamic light/dark tokens in `Theme.swift`. Accent
   `#6D80A6`; dark bg `#2C2D2F` / fg `#E7E5E0`. See spec §6.
+- App icon: `Resources/AppIcon.png` (book + `{ / }`); `build-app.sh` generates the
+  `.icns`. Menu-bar glyph is a code-drawn `{ / }` template (`StatusItemIcon`).
 
 ## Commands
 

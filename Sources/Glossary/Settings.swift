@@ -18,9 +18,11 @@ enum PanelSize: String, CaseIterable, Identifiable {
     case small, medium, large
     var id: String { rawValue }
     var label: String { rawValue.capitalized }
+    // Width is fixed; height sets the List-mode size (rows shown). Detail mode hugs
+    // its content, so this height doesn't apply there.
     var size: CGSize {
         switch self {
-        case .small:  return CGSize(width: 520, height: 360)
+        case .small:  return CGSize(width: 520, height: 380)
         case .medium: return CGSize(width: 640, height: 440)
         case .large:  return CGSize(width: 760, height: 540)
         }
@@ -66,6 +68,25 @@ struct HotkeyPreset: Identifiable, Equatable {
     ]
     static let defaultID = "opt-esc"
     static func preset(id: String) -> HotkeyPreset { all.first { $0.id == id } ?? all[0] }
+
+    /// Menu-item key equivalent for displaying the shortcut.
+    var menuKeyEquivalent: String {
+        switch keyCode {
+        case 49: return " "        // space
+        case 53: return "\u{1b}"   // escape ⎋
+        case 50: return "`"        // backtick
+        default: return ""
+        }
+    }
+
+    var menuModifierFlags: NSEvent.ModifierFlags {
+        var flags: NSEvent.ModifierFlags = []
+        if modifiers & 0x0100 != 0 { flags.insert(.command) }
+        if modifiers & 0x0800 != 0 { flags.insert(.option) }
+        if modifiers & 0x1000 != 0 { flags.insert(.control) }
+        if modifiers & 0x0200 != 0 { flags.insert(.shift) }
+        return flags
+    }
 }
 
 // MARK: - Settings store (UserDefaults-backed)

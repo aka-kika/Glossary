@@ -1,5 +1,6 @@
 import AppKit
 import SwiftUI
+import Combine
 import GlossaryCore
 
 /// Borderless floating panel that can still accept keyboard focus.
@@ -9,12 +10,19 @@ final class OverlayPanel: NSPanel {
 }
 
 /// Owns the centered overlay (Overlay presentation mode): shows/centers/hides it,
-/// reads the clipboard on summon, and routes keystrokes to `AppState`.
+/// reads the clipboard on summon, sizes the window to hug its content (instantly,
+/// no animation), and routes keystrokes to `AppState`.
 final class OverlayPanelController {
     private let appState: AppState
     private let settings: Settings
     private var panel: OverlayPanel?
+    private var hostingView: NSHostingView<AnyView>?
     private var keyMonitor: Any?
+    private var sizeObserver: AnyCancellable?
+
+    /// Search bar + divider + footer — used to derive the list body height so List
+    /// mode keeps the chosen preset's overall size.
+    private let chromeHeight: CGFloat = 84
 
     init(appState: AppState, settings: Settings) {
         self.appState = appState
@@ -30,7 +38,6 @@ final class OverlayPanelController {
     }
 
     func show() {
-        // Rebuild each time so size + appearance changes take effect immediately.
         if let panel { panel.orderOut(nil) }
         let panel = makePanel()
         self.panel = panel
@@ -41,7 +48,11 @@ final class OverlayPanelController {
             appState.reset()
         }
 
-        center(panel)
+        fitToContent(center: true)
+        // Re-fit instantly as content changes (mode switch, disclosure, results).
+        sizeObserver = appState.objectWillChange
+            .sink { [weak self] in DispatchQueue.main.async { self?.fitToContent(center: false) } }
+
         installKeyMonitor()
         NSApp.activate(ignoringOtherApps: true)
         panel.makeKeyAndOrderFront(nil)
@@ -49,20 +60,46 @@ final class OverlayPanelController {
     }
 
     func hide() {
+        sizeObserver?.cancel(); sizeObserver = nil
         removeKeyMonitor()
         appState.reset()
         panel?.orderOut(nil)
     }
 
+    // MARK: - Content-fit sizing (instant — no animation)
+
+    /// Size the panel to the content's ideal height (width fixed by the preset),
+    /// keeping the top edge fixed so blocks reveal downward. Instant, no animation.
+    private func fitToContent(center: Bool) {
+        guard let panel, let host = hostingView else { return }
+        host.layoutSubtreeIfNeeded()
+        var size = host.fittingSize
+        guard size.width > 1, size.height > 1 else { return }
+
+        let visible = (panel.screen ?? NSScreen.main)?.visibleFrame
+        if let visible { size.height = min(size.height, visible.height - 40) }
+
+        let old = panel.frame
+        var origin = NSPoint(x: old.origin.x, y: old.maxY - size.height)  // anchor top
+        if center, let visible {
+            origin.x = visible.midX - size.width / 2
+            origin.y = visible.midY - size.height / 2 + visible.height * 0.08
+        }
+        if let visible {
+            origin.y = max(visible.minY, min(origin.y, visible.maxY - size.height))
+        }
+        panel.setFrame(NSRect(origin: origin, size: size), display: true, animate: false)
+    }
+
     // MARK: - Panel construction
 
     private func makePanel() -> OverlayPanel {
-        let size = settings.panelSize.size
+        let preset = settings.panelSize.size
         let appearance = settings.appearance.nsAppearance ?? NSApp.effectiveAppearance
         let isDark = Theme.isDark(appearance)
 
         let panel = OverlayPanel(
-            contentRect: NSRect(origin: .zero, size: size),
+            contentRect: NSRect(origin: .zero, size: preset),
             styleMask: [.borderless, .nonactivatingPanel],
             backing: .buffered,
             defer: false
@@ -88,7 +125,9 @@ final class OverlayPanelController {
         visual.layer?.borderWidth = 1
         visual.layer?.borderColor = NSColor(white: isDark ? 0.9 : 0.0, alpha: 0.10).cgColor
 
-        let host = NSHostingView(rootView: RootView().environmentObject(appState))
+        let root = RootView(width: preset.width, listBodyHeight: preset.height - chromeHeight)
+            .environmentObject(appState)
+        let host = NSHostingView(rootView: AnyView(root))
         host.translatesAutoresizingMaskIntoConstraints = false
         visual.addSubview(host)
         NSLayoutConstraint.activate([
@@ -97,18 +136,10 @@ final class OverlayPanelController {
             host.topAnchor.constraint(equalTo: visual.topAnchor),
             host.bottomAnchor.constraint(equalTo: visual.bottomAnchor),
         ])
+        self.hostingView = host
 
         panel.contentView = visual
         return panel
-    }
-
-    private func center(_ panel: NSPanel) {
-        guard let screen = NSScreen.main else { panel.center(); return }
-        let frame = screen.visibleFrame
-        let size = panel.frame.size
-        let x = frame.midX - size.width / 2
-        let y = frame.midY - size.height / 2 + frame.height * 0.08
-        panel.setFrameOrigin(NSPoint(x: x, y: y))
     }
 
     // MARK: - Key routing (see design spec §3)
@@ -132,7 +163,6 @@ final class OverlayPanelController {
 
         switch event.keyCode {
         case KeyCode.escape:
-            // Two-stage: back out of a focused term first, then dismiss.
             if appState.mode == .detail { appState.returnToList() } else { hide() }
             return true
 

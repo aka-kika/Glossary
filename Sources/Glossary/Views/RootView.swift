@@ -4,6 +4,12 @@ import GlossaryCore
 /// The whole overlay: search bar on top, then results (List mode) or the focused
 /// term (Detail mode), then a keyboard-hint footer. Wrapped in glassmorphism.
 struct RootView: View {
+    /// Fixed width (from the size preset); the height is intrinsic so a focused
+    /// term hugs its visible blocks (no dead space). The list keeps a stable height
+    /// so typing doesn't resize the window.
+    var width: CGFloat = 640
+    var listBodyHeight: CGFloat = 356
+
     @EnvironmentObject private var state: AppState
     @Environment(\.colorScheme) private var scheme
 
@@ -16,14 +22,13 @@ struct RootView: View {
                 if state.mode == .detail, let term = state.focusedTerm {
                     TermDetailView(term: term)
                 } else {
-                    ResultsList()
+                    ResultsList().frame(height: listBodyHeight)
                 }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
 
             HintFooter()
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(width: width)
         // Let the window vibrancy carry the surface. In dark we add a strong KIKA
         // tint for legibility over the dark HUD material + a faint top sheen; in
         // light we keep the tint very light so it reads as a native translucent
