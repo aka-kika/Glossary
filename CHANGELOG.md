@@ -6,6 +6,19 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+### Fixed
+- **Rebinding the summon hotkey now works.** Three compounding bugs: (1) the change
+  handler read `settings.hotkeyID` while `@Published` notifies in `willSet`, so it
+  re-registered the *old* id every time — now the new id is taken from the publisher;
+  (2) a static table retained every hotkey forever, so the old one was never
+  unregistered; (3) a duplicate Carbon event handler was installed on each rebind,
+  making the new key toggle twice. The handler is now installed once and old keys are
+  released, so the new hotkey takes effect, the old one stops, and the menu's "Show
+  Glossary" shortcut updates with it.
+- **Light-mode disclosure-block colors are legible.** The accents (especially the
+  Analogy "sand" tone) were invisible on the light surface; they now adapt to
+  darker, more-saturated variants in light mode.
+
 ### Added
 - **App icon** (dark open book with `{ / }` code braces). `scripts/build-app.sh`
   generates `AppIcon.icns` (16–1024px) from `Resources/AppIcon.png` and sets

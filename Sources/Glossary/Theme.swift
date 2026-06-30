@@ -16,11 +16,13 @@ enum Theme {
     static let line  = dynamicAlpha(light: (0x0D0D0D, 0.14), dark: (0xE7E5E0, 0.10))
     static let line2 = dynamicAlpha(light: (0x0D0D0D, 0.05), dark: (0xE7E5E0, 0.05))
 
-    /// Brand-derived disclosure-block header accents (same in both modes).
-    static let whatItIsAccent = Color(hex: 0x6D80A6)  // slate blue
-    static let analogyAccent  = Color(hex: 0xB9B8B3)  // sand
-    static let whyAccent      = Color(hex: 0xFF8A80)  // coral
-    static let exampleAccent  = Color(hex: 0x9B8FA6)  // dusty lilac
+    /// Brand-derived disclosure-block header accents. Dynamic: the dark tones are
+    /// the brand pastels; light mode uses darker/more-saturated variants so they
+    /// stay legible on the light cream surface (the sand pastel was invisible).
+    static let whatItIsAccent = dynamic(light: 0x4E658F, dark: 0x6D80A6)  // slate blue
+    static let analogyAccent  = dynamic(light: 0x877F6B, dark: 0xB9B8B3)  // sand → taupe
+    static let whyAccent      = dynamic(light: 0xC65548, dark: 0xFF8A80)  // coral
+    static let exampleAccent  = dynamic(light: 0x6E5F80, dark: 0x9B8FA6)  // dusty lilac
 
     // MARK: - Dynamic helpers
 

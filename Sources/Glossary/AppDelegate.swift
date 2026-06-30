@@ -26,7 +26,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         setupStatusItem()
         mini.attach(to: statusItem.button)
 
-        registerHotkey()
+        registerHotkey(id: settings.hotkeyID)
         applyLaunchAtLogin(settings.launchAtLogin)
         observeSettings()
     }
@@ -67,7 +67,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         showItem = NSMenuItem(title: "Show Glossary", action: #selector(showFromMenu), keyEquivalent: "")
         showItem.image = StatusItemIcon.image(size: 16)              // the app's { / } glyph
-        updateShowShortcut()
+        updateShowShortcut(id: settings.hotkeyID)
         menu.addItem(showItem)
 
         let settingsItem = NSMenuItem(title: "Settings…", action: #selector(openSettings), keyEquivalent: ",")
@@ -84,9 +84,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem.menu = menu
     }
 
-    /// Shows the currently-configured summon hotkey beside "Show Glossary".
-    private func updateShowShortcut() {
-        let hk = settings.hotkey
+    /// Shows the given summon hotkey beside "Show Glossary".
+    private func updateShowShortcut(id: String) {
+        let hk = HotkeyPreset.preset(id: id)
         showItem?.keyEquivalent = hk.menuKeyEquivalent
         showItem?.keyEquivalentModifierMask = hk.menuModifierFlags
     }
@@ -99,9 +99,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     // MARK: - Hotkey
 
-    private func registerHotkey() {
+    /// Register the hotkey for the given preset id. Takes the id explicitly because
+    /// `@Published` notifies in `willSet` — reading `settings.hotkeyID` from the
+    /// change handler would still return the *old* value.
+    private func registerHotkey(id: String) {
         hotkey = nil  // deinit unregisters the previous one
-        let preset = settings.hotkey
+        let preset = HotkeyPreset.preset(id: id)
         hotkey = GlobalHotkey(keyCode: preset.keyCode, modifiers: preset.modifiers) { [weak self] in
             self?.toggle()
         }
@@ -126,9 +129,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func observeSettings() {
         settings.$hotkeyID
             .dropFirst()
-            .sink { [weak self] _ in
-                self?.registerHotkey()
-                self?.updateShowShortcut()
+            .sink { [weak self] newID in
+                self?.registerHotkey(id: newID)
+                self?.updateShowShortcut(id: newID)
             }
             .store(in: &cancellables)
 

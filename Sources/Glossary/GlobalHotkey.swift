@@ -3,26 +3,45 @@ import Carbon.HIToolbox
 
 /// A single system-wide hotkey registered via Carbon `RegisterEventHotKey`.
 /// Works without Accessibility permission. Main-thread only.
+///
+/// Handlers are stored by id (not the object), so releasing a `GlobalHotkey`
+/// actually deinits it and unregisters the key — letting the hotkey be rebound.
+/// The Carbon event handler is installed exactly once.
 final class GlobalHotkey {
     private var hotKeyRef: EventHotKeyRef?
-    private var eventHandlerRef: EventHandlerRef?
     private let id: UInt32
-    private let handler: () -> Void
 
     private static var nextID: UInt32 = 1
-    private static var instances: [UInt32: GlobalHotkey] = [:]
+    private static var handlers: [UInt32: () -> Void] = [:]
+    private static var eventHandlerRef: EventHandlerRef?
     private static let signature: OSType = 0x474C5359  // 'GLSY'
 
-    /// Convenience for the app's summon hotkey: Option + Space.
-    static func optionSpace(handler: @escaping () -> Void) -> GlobalHotkey? {
-        GlobalHotkey(keyCode: UInt32(kVK_Space), modifiers: UInt32(optionKey), handler: handler)
-    }
-
     init?(keyCode: UInt32, modifiers: UInt32, handler: @escaping () -> Void) {
-        self.handler = handler
         self.id = GlobalHotkey.nextID
         GlobalHotkey.nextID += 1
+        GlobalHotkey.installHandlerIfNeeded()
 
+        let hotKeyID = EventHotKeyID(signature: GlobalHotkey.signature, id: id)
+        let status = RegisterEventHotKey(
+            keyCode,
+            modifiers,
+            hotKeyID,
+            GetApplicationEventTarget(),
+            0,
+            &hotKeyRef
+        )
+        guard status == noErr else { return nil }
+        GlobalHotkey.handlers[id] = handler
+    }
+
+    deinit {
+        if let hotKeyRef { UnregisterEventHotKey(hotKeyRef) }
+        GlobalHotkey.handlers[id] = nil
+    }
+
+    /// Install the shared Carbon event handler the first time it's needed.
+    private static func installHandlerIfNeeded() {
+        guard eventHandlerRef == nil else { return }
         var eventType = EventTypeSpec(
             eventClass: OSType(kEventClassKeyboard),
             eventKind: OSType(kEventHotKeyPressed)
@@ -35,24 +54,6 @@ final class GlobalHotkey {
             nil,
             &eventHandlerRef
         )
-
-        let hotKeyID = EventHotKeyID(signature: GlobalHotkey.signature, id: id)
-        let status = RegisterEventHotKey(
-            keyCode,
-            modifiers,
-            hotKeyID,
-            GetApplicationEventTarget(),
-            0,
-            &hotKeyRef
-        )
-        guard status == noErr else { return nil }
-        GlobalHotkey.instances[id] = self
-    }
-
-    deinit {
-        if let hotKeyRef { UnregisterEventHotKey(hotKeyRef) }
-        if let eventHandlerRef { RemoveEventHandler(eventHandlerRef) }
-        GlobalHotkey.instances[id] = nil
     }
 
     /// C callback — looks up the firing hotkey by id and invokes its handler.
@@ -67,7 +68,7 @@ final class GlobalHotkey {
             nil,
             &firedID
         )
-        GlobalHotkey.instances[firedID.id]?.handler()
+        GlobalHotkey.handlers[firedID.id]?()
         return noErr
     }
 }
