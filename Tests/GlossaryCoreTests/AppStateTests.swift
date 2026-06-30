@@ -93,6 +93,17 @@ struct AppStateTests {
         #expect(text?.contains("Example") == true)
     }
 
+    @Test("updateTerms swaps the glossary and rebuilds the list")
+    func updateTerms() {
+        let s = makeState()
+        s.updateTerms([term("z", "Zeta"), term("y", "Yotta")])
+        #expect(s.terms.count == 2)
+        #expect(s.results.map(\.id) == ["z", "y"])
+        #expect(s.mode == .list)
+        s.setQuery("yot")
+        #expect(s.results.first?.id == "y")
+    }
+
     @Test("reset clears everything back to initial")
     func reset() {
         let s = makeState()

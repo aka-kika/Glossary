@@ -14,8 +14,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var cancellables: Set<AnyCancellable> = []
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        let glossary = (try? Glossary.loadBundled()) ?? Glossary(terms: [])
-        appState = AppState(terms: glossary.terms, usage: DefaultsUsageStore())
+        // Load from the user-editable file (seeded from the bundled terms first run).
+        let library = GlossaryLibrary.shared
+        appState = AppState(terms: library.bootstrap(), usage: DefaultsUsageStore())
+        library.applyTerms = { [weak self] terms in self?.appState.updateTerms(terms) }
+
         overlay = OverlayPanelController(appState: appState, settings: settings)
         mini = MiniPopoverController(appState: appState, settings: settings)
 

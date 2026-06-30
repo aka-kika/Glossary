@@ -32,7 +32,7 @@ public final class AppState: ObservableObject {
     /// Bumped to ask the UI to (re)focus the search field on each summon.
     @Published public private(set) var focusRequestID: Int = 0
 
-    public let terms: [Term]
+    public private(set) var terms: [Term]
     private let matcher: FuzzyMatcher
     private let formatter: TermFormatter
     private let usage: UsageStore
@@ -152,6 +152,13 @@ public final class AppState: ObservableObject {
     /// Request the search field to take keyboard focus (called on summon).
     public func requestSearchFocus() {
         focusRequestID += 1
+    }
+
+    /// Replace the glossary at runtime (e.g. after the user edits & reloads the
+    /// external file). Usage history is keyed by term id, so it survives reloads.
+    public func updateTerms(_ newTerms: [Term]) {
+        terms = newTerms
+        reset()
     }
 
     // MARK: - Summon / dismiss

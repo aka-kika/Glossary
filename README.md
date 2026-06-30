@@ -54,11 +54,26 @@ scripts/build-app.sh      # build a distributable Glossary.app
 `LSUIElement`). Double-click it, or add it to **System Settings → General → Login
 Items** to have it ready at all times. Press `Option+Space` to summon.
 
-## Data
+## Data & adding terms
 
-Terms live in [`Sources/GlossaryCore/Resources/glossary.json`](Sources/GlossaryCore/Resources/glossary.json)
-as a flat array. Each entry has: `id`, `term`, `whatItIs`, `analogy`, `whyItMatters`,
-`example`. Edit the JSON and rebuild to change the glossary.
+On first launch the app seeds an **editable glossary file** at
+`~/Library/Application Support/Glossary/glossary.json` from the built-in terms.
+That file is the source of truth from then on — **add terms without rebuilding**:
+
+1. Settings (`⌘,`) → **Copy New-Term Template** (gives you the exact JSON shape).
+2. **Open Glossary File…** (or **Reveal in Finder**), paste the template inside the
+   `[ … ]` list, and fill in the fields.
+3. Back in Settings → **Reload**.
+
+Each entry has: `id`, `term`, `whatItIs`, `analogy`, `whyItMatters`, `example`.
+**Reset Glossary to Default** restores the built-in set. (If your edit has a JSON
+error, the app keeps the built-in terms and tells you — just fix it and Reload.)
+
+When an app update ships **new** built-in terms, they're merged into your file
+automatically on launch (or via **Add New Built-in Terms**) — your own terms and
+edits are kept, and built-ins you deleted are not brought back.
+
+The built-in seed lives in [`Sources/GlossaryCore/Resources/glossary.json`](Sources/GlossaryCore/Resources/glossary.json).
 
 ## Project layout
 

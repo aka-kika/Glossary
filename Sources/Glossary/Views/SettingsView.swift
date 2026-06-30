@@ -4,6 +4,7 @@ import SwiftUI
 /// (UserDefaults); the AppDelegate reacts to the changes that need live effect.
 struct SettingsView: View {
     @ObservedObject private var settings = Settings.shared
+    @ObservedObject private var library = GlossaryLibrary.shared
 
     var body: some View {
         Form {
@@ -41,6 +42,26 @@ struct SettingsView: View {
             }
 
             Section {
+                Button("Open Glossary File…") { library.openInEditor() }
+                Button("Reveal in Finder") { library.revealInFinder() }
+                Button("Reload") { library.reload() }
+                Button("Copy New-Term Template") { library.copyTemplate() }
+                Button("Add New Built-in Terms") { library.mergeBuiltins() }
+                Button("Reset Glossary to Default", role: .destructive) { library.resetToDefault() }
+            } header: {
+                Text("Glossary")
+            } footer: {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Add terms by editing the file — paste the template inside the [ … ] list, then Reload. No rebuild needed. \(library.termCount) terms loaded.")
+                    if !library.status.isEmpty {
+                        Text(library.status).foregroundStyle(.secondary)
+                    }
+                }
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+            }
+
+            Section {
                 Button("Reset to Defaults", role: .destructive) {
                     settings.resetToDefaults()
                 }
@@ -51,6 +72,6 @@ struct SettingsView: View {
             }
         }
         .formStyle(.grouped)
-        .frame(width: 440, height: 470)
+        .frame(width: 460, height: 620)
     }
 }

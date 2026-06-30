@@ -59,10 +59,15 @@ Living task list. Check items off as they land; add follow-ups as you find them.
 - [ ] Launch at login registers/unregisters (check System Settings → Login Items)
 - [ ] Esc goes back to the list from a term, then closes
 
+## v1.2 — add-your-own terms (done)
+- [x] Editable glossary file in Application Support (seeded from bundle)
+- [x] Settings: Open file, Reveal in Finder, Reload, Copy template, Reset to default
+- [x] `AppState.updateTerms` for runtime reload; usage survives by term id
+- [x] Smart merge of new built-ins on update (keeps edits; respects deletions)
+
 ## Later (deferred)
+- [ ] Optional in-app "Add Term" form (vs. editing the JSON file)
 - [ ] Free-form hotkey recorder (vs. preset list)
 - [ ] Modules / categories grouping
-- [ ] In-app term editing
-- [ ] Recents / persistence
 - [ ] Bundle Fira Sans/Code brand fonts
 - [ ] App icon

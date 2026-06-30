@@ -137,6 +137,17 @@ struct Term: Codable, Identifiable, Hashable {
 }
 ```
 
+**Storage (v1.1):** the bundled `glossary.json` is only a *seed*. On first launch
+`GlossaryLibrary` copies it to an editable file at
+`~/Library/Application Support/Glossary/glossary.json` (written in fixed field order
+for hand-editing) and loads terms from there. Settings can open/reveal/reload/reset
+the file and copy a new-term template; `AppState.updateTerms` applies a reload at
+runtime (usage history is keyed by term id, so it survives). Invalid JSON falls back
+to the bundled seed with a status message. On launch (and via a button) new built-in
+terms shipped by an app update are merged in without disturbing the user's own terms
+or edits; an "already-merged" id record (UserDefaults) stops deleted built-ins from
+being resurrected. The pure diff is `Glossary.newBuiltins(bundled:existing:alreadyMerged:)`.
+
 Seeded from the user's original 24 tech terms (Framework, Proxy, HTTP, HTTPS,
 Interface, VPS, MCP Server, MCP Tunnel, SDK, ACP, CI, MongoDB, API, JSON, Webhook,
 Environment Variables, Middleware, Docker, Git, Deployment, Encryption, DNS, Endpoint,

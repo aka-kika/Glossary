@@ -7,6 +7,17 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [Unreleased]
 
 ### Added
+- **Editable glossary file** — on first run the app seeds
+  `~/Library/Application Support/Glossary/glossary.json` from the built-in terms,
+  then loads from it, so you can add terms without rebuilding. Settings gains a
+  **Glossary** section: Open File, Reveal in Finder, Reload, Copy New-Term
+  Template, Add New Built-in Terms, and Reset to Default. Invalid JSON falls back
+  to the built-in set with a message. (`GlossaryLibrary` + `AppState.updateTerms`.)
+- **Smart built-in merge** — when an app update ships new built-in terms, they are
+  merged into your file automatically on launch (and via the button), preserving
+  your custom terms and edits. Built-ins you deliberately deleted are not
+  resurrected, tracked via an "already-merged" id record. Pure diff logic
+  (`Glossary.newBuiltins`) is unit-tested.
 - **Frecency ranking** — terms you open often and recently float toward the top.
   Applied softly: it orders the empty-search browse list and breaks ties between
   equally-good fuzzy matches, but never overrides a clearly better text match.

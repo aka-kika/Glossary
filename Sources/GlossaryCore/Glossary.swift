@@ -24,6 +24,21 @@ public struct Glossary: Sendable {
     }
 }
 
+public extension Glossary {
+    /// Built-in terms that should be merged into an existing user library on an app
+    /// update: present in `bundled`, not already in the user's `existing` library,
+    /// and not previously merged (so built-ins the user deliberately deleted are not
+    /// resurrected). Preserves bundled order.
+    static func newBuiltins(
+        bundled: [Term],
+        existing: [Term],
+        alreadyMerged: Set<String>
+    ) -> [Term] {
+        let existingIDs = Set(existing.map(\.id))
+        return bundled.filter { !alreadyMerged.contains($0.id) && !existingIDs.contains($0.id) }
+    }
+}
+
 public enum GlossaryError: Error, Equatable, Sendable {
     case resourceMissing
 }

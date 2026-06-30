@@ -39,6 +39,9 @@ as **not done** until its docs are updated.
 - Two keyboard modes — **List** (typing/arrows) and **Detail** (Space/⌘D/⌘C). `Esc`
   is two-stage (Back from a term, then close). See spec §3.
 - Default hotkey **⌥Esc** (rebindable in Settings). Presentation: Overlay or Mini.
+- Terms load from an editable file (`~/Library/Application Support/Glossary/glossary.json`)
+  seeded from the bundled `glossary.json`; `GlossaryLibrary` handles seed/load/reload/reset
+  and Settings exposes it. Bundled JSON is just the seed.
 - Brand: **KIKA** palette, dynamic light/dark tokens in `Theme.swift`. Accent
   `#6D80A6`; dark bg `#2C2D2F` / fg `#E7E5E0`. See spec §6.
 
