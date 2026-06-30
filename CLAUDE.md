@@ -28,7 +28,9 @@ as **not done** until its docs are updated.
 
 - Swift 6.3 / Xcode 26, Apple Silicon, macOS 14+.
 - **`GlossaryCore`** (library) — pure, fully unit-tested logic: `Term`, `Glossary`
-  (JSON loader), `FuzzyMatcher`, `AppState` (modes + disclosure levels), `TermFormatter`.
+  (JSON loader), `FuzzyMatcher`, `AppState` (modes + single-key disclosure stepper +
+  frecency ordering), `TermFormatter`, `UsageStore`/`frecencyScore`. The app injects a
+  `DefaultsUsageStore` (UserDefaults) for persistence.
 - **`Glossary`** (executable) — AppKit shell: `NSStatusItem`, `OverlayPanelController`
   (floating `NSPanel`) and `MiniPopoverController` (menu-bar `NSPopover`),
   `GlobalHotkey` (Carbon `RegisterEventHotKey`), `Settings` (UserDefaults store) +

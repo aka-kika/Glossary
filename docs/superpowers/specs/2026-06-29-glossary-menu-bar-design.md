@@ -80,7 +80,7 @@ Option+Space ──► GlobalHotkey ──► OverlayPanelController.toggle()
 term. Resolved with two modes rather than heuristics:
 
 - **List mode** — search field is first responder.
-  - Typing → live fuzzy filter.
+  - Typing → live fuzzy filter (frecency breaks ties; see Ranking below).
   - `↑` / `↓` → move highlight through results.
   - `Enter` → focus highlighted term → **Detail mode** (text field resigns).
 - **Detail mode** — text field is *not* first responder.
@@ -102,6 +102,15 @@ term. Resolved with two modes rather than heuristics:
 reverses and closes them one at a time (Example first), then cycles. Focusing a new
 term or returning to the list resets it to 0. `Cmd+D` was removed in favour of the
 single-key flow.
+
+### Ranking (frecency)
+
+Opening a term records an open (count + timestamp) in a `UsageStore`. `frecencyScore`
+weights frequency by recency (recent opens count more; old ones decay). `AppState`
+applies it **softly**: the empty-search browse list is ordered by frecency, and when
+searching it only breaks ties between equal fuzzy scores — a better text match always
+wins. Persistence (`DefaultsUsageStore`, UserDefaults) lives in the app layer; the
+scoring is pure and tested in `GlossaryCore`.
 
 ---
 

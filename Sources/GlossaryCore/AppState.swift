@@ -35,6 +35,8 @@ public final class AppState: ObservableObject {
     public let terms: [Term]
     private let matcher: FuzzyMatcher
     private let formatter: TermFormatter
+    private let usage: UsageStore
+    private let clock: () -> Date
 
     /// Minimum fuzzy score for a clipboard string to auto-load a term.
     public static let clipboardThreshold = 25
@@ -44,12 +46,17 @@ public final class AppState: ObservableObject {
     public init(
         terms: [Term],
         matcher: FuzzyMatcher = FuzzyMatcher(),
-        formatter: TermFormatter = TermFormatter()
+        formatter: TermFormatter = TermFormatter(),
+        usage: UsageStore = InMemoryUsageStore(),
+        clock: @escaping () -> Date = { Date() }
     ) {
         self.terms = terms
         self.matcher = matcher
         self.formatter = formatter
+        self.usage = usage
+        self.clock = clock
         self.results = terms
+        recomputeResults()
     }
 
     // MARK: - List mode
@@ -57,10 +64,44 @@ public final class AppState: ObservableObject {
     /// Update the live search query (List mode).
     public func setQuery(_ newValue: String) {
         query = newValue
-        results = matcher.search(newValue, in: terms)
+        recomputeResults()
         selectionIndex = 0
         mode = .list
         focusedTerm = nil
+    }
+
+    /// Rebuild `results`. Empty query → browse list ordered by frecency (then the
+    /// original order). Non-empty → fuzzy relevance first, with frecency only
+    /// breaking ties, then original order — so usage never beats a better match.
+    private func recomputeResults() {
+        let q = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        let now = clock()
+        let indexed = Array(terms.enumerated())
+
+        if q.isEmpty {
+            results = indexed
+                .sorted { a, b in
+                    let sa = usage.score(for: a.element.id, now: now)
+                    let sb = usage.score(for: b.element.id, now: now)
+                    if sa != sb { return sa > sb }
+                    return a.offset < b.offset
+                }
+                .map(\.element)
+        } else {
+            results = indexed
+                .compactMap { offset, term -> (score: Int, term: Term, offset: Int)? in
+                    guard let score = matcher.score(query: q, candidate: term.term) else { return nil }
+                    return (score, term, offset)
+                }
+                .sorted { a, b in
+                    if a.score != b.score { return a.score > b.score }
+                    let fa = usage.score(for: a.term.id, now: now)
+                    let fb = usage.score(for: b.term.id, now: now)
+                    if fa != fb { return fa > fb }
+                    return a.offset < b.offset
+                }
+                .map(\.term)
+        }
     }
 
     /// Move the highlighted result (clamped to bounds).
@@ -118,11 +159,11 @@ public final class AppState: ObservableObject {
     /// Reset everything (called on dismiss / Escape / hotkey-hide).
     public func reset() {
         query = ""
-        results = terms
         selectionIndex = 0
         mode = .list
         focusedTerm = nil
         resetDisclosure()
+        recomputeResults()   // browse list re-sorted by frecency on each summon
     }
 
     /// On summon: resolve the clipboard string to a term, if it cleanly matches.
@@ -149,11 +190,11 @@ public final class AppState: ObservableObject {
     // MARK: - Private
 
     private func focus(_ term: Term) {
+        usage.record(term.id, now: clock())   // counts toward frecency
         focusedTerm = term
         mode = .detail
         resetDisclosure()
-        if let idx = results.firstIndex(of: term) {
-            selectionIndex = idx
-        }
+        recomputeResults()                     // reflect the boosted term in the list
+        selectionIndex = results.firstIndex(of: term) ?? 0
     }
 }

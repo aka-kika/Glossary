@@ -7,6 +7,11 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [Unreleased]
 
 ### Added
+- **Frecency ranking** — terms you open often and recently float toward the top.
+  Applied softly: it orders the empty-search browse list and breaks ties between
+  equally-good fuzzy matches, but never overrides a clearly better text match.
+  Usage (open count + last-opened) persists in UserDefaults; the scoring lives in
+  `GlossaryCore` (`frecencyScore`, `UsageStore`) and is unit-tested.
 - Expanded the seed glossary from **24 to 54 terms** (added cache, cookie, CDN,
   load balancer, Kubernetes, cloud, OAuth, REST, GraphQL, microservices, SSH,
   regex, async, and more) so there's more to search and scroll while testing.

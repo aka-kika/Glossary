@@ -15,7 +15,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let glossary = (try? Glossary.loadBundled()) ?? Glossary(terms: [])
-        appState = AppState(terms: glossary.terms)
+        appState = AppState(terms: glossary.terms, usage: DefaultsUsageStore())
         overlay = OverlayPanelController(appState: appState, settings: settings)
         mini = MiniPopoverController(appState: appState, settings: settings)
 
