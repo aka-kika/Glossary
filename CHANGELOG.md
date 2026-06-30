@@ -6,6 +6,11 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+### Added
+- **MIT `LICENSE`.**
+- **Polished README** — app-icon header, badges, and screenshots (Overlay search,
+  expanded term in light theme, and Mini mode) under `docs/screenshots/`.
+
 ### Fixed
 - **Rebinding the summon hotkey now works.** Three compounding bugs: (1) the change
   handler read `settings.hotkeyID` while `@Published` notifies in `willSet`, so it

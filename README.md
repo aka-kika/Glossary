@@ -1,80 +1,127 @@
-# Glossary
+<p align="center">
+  <img src="Resources/AppIcon.png" width="112" alt="Glossary icon">
+</p>
 
-A keyboard-first, distraction-free macOS menu-bar glossary. Summon a centered,
-Raycast-style overlay with a global hotkey, fuzzy-search a small tech glossary, and
-reveal each term through four tiers of progressive disclosure — without touching the
-mouse.
+<h1 align="center">Glossary</h1>
 
-> Native Swift 6 / SwiftUI + AppKit · Apple Silicon · macOS 14+ · **KIKA** brand.
+<p align="center">
+  A keyboard-first, distraction-free macOS menu-bar glossary.<br>
+  Summon it from anywhere, fuzzy-search a term, and learn it in seconds — without ever touching the mouse.
+</p>
+
+<p align="center">
+  <img alt="Platform" src="https://img.shields.io/badge/platform-macOS%2014%2B-1f6feb">
+  <img alt="Swift" src="https://img.shields.io/badge/Swift-6.3-f05138">
+  <img alt="UI" src="https://img.shields.io/badge/UI-SwiftUI%20%2B%20AppKit-6d80a6">
+  <img alt="License" src="https://img.shields.io/badge/license-MIT-3fb950">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/overlay-search-dark.png" width="720" alt="Overlay — fuzzy search">
+</p>
+<p align="center">
+  <img src="docs/screenshots/overlay-term-light.png" width="430" alt="Overlay — expanded term (light theme)">
+  &nbsp;&nbsp;
+  <img src="docs/screenshots/mini.png" width="270" alt="Mini mode — menu-bar dropdown">
+</p>
+
+---
+
+## Why
+
+Looking up a term shouldn't break your flow. Glossary lives in the menu bar, opens
+on a global hotkey, and reveals just enough — a one-line summary first, then an
+analogy, then the deep dive — all driven by a single key. It's built to **minimize
+cognitive load** while you learn.
 
 ## Features
 
-- **Global summon** — `⌥Esc` (default, rebindable) shows/hides the overlay from anywhere.
-- **Clipboard auto-load** — on summon, if your clipboard matches a term, it loads instantly.
-- **Fuzzy search** — type to filter; `↑`/`↓` to navigate results.
-- **Progressive disclosure** — reveal more only when you want it (4 tiers).
-- **Copy** — `Cmd+C` copies a clean, formatted block of the active term.
-- **Two presentation modes** — a centered Raycast-style **Overlay**, or a compact
-  **Mini** dropdown from the menu bar that shows only the "What It Is" summary.
-- **Keyboard-only** — no mouse interaction required for anything.
+- **Global summon** — `⌥Esc` (rebindable) shows/hides the overlay from any app.
+- **Clipboard auto-load** — copy a term, summon, and it's already open.
+- **Fuzzy search** — type to filter; usage-aware (frecency) ranking floats your
+  favorites up without ever beating a better text match.
+- **Single-key disclosure** — `Space` reveals the next block (Analogy → Why It
+  Matters → Example), then closes them, on a loop.
+- **Two presentation modes** — a centered, Raycast-style **Overlay** or a compact
+  **Mini** dropdown from the menu bar.
+- **Light / Dark / System** theming in the **KIKA** brand palette.
+- **Add your own terms** — an editable JSON file, no rebuild required.
+- **100% keyboard** — nothing here needs a mouse.
 
 ## Keyboard
 
 | Key | Action |
 | --- | --- |
 | `⌥Esc` *(default)* | Summon / hide (global; rebindable in Settings) |
-| Type | Fuzzy-filter terms (List mode) |
+| Type | Fuzzy-filter terms |
 | `↑` / `↓` | Move through results |
-| `Enter` | Focus the highlighted term |
-| `Space` | **Step disclosure** — open the next block (Analogy → Why It Matters → Example); once all open, each press closes one, then cycles |
+| `Enter` | Open the highlighted term |
+| `Space` | Reveal the next block; once all are open, close them one by one |
 | `Cmd+C` | Copy the active term |
-| `Escape` | **Back** to the list from a term, or dismiss from the list |
+| `Escape` | Back to the list from a term, or dismiss from the list |
 
 ## Settings
 
 Open from the menu-bar icon → **Settings…** (or `⌘,`):
 
-- **Hotkey** — pick the 2-key summon chord.
+- **Hotkey** — pick the 2-key summon chord (⌥Esc, ⌃Esc, ⇧Esc, ⌘Esc, ⌃Space, …).
 - **Window style** — Overlay (centered) or Mini (menu-bar dropdown).
-- **Panel size** — Small / Medium / Large (Overlay mode).
-- **Theme** — System / Dark / Light (KIKA palette).
-- **Launch at login**, **Auto-load from clipboard**, and **Reset to Defaults**.
+- **Panel size** — Small / Medium / Large.
+- **Theme** — System / Dark / Light.
+- **Launch at login**, **Auto-load from clipboard**, and resets.
+- **Glossary** — open/reveal/reload the term file, copy a new-term template, and
+  merge in new built-ins.
+
+## Adding terms
+
+On first launch the app seeds an editable file at
+`~/Library/Application Support/Glossary/glossary.json`. From then on it's the source
+of truth — **add terms without rebuilding**:
+
+1. Settings → **Copy New-Term Template** (the exact JSON shape).
+2. **Open Glossary File…**, paste it inside the `[ … ]` list, and fill in the fields.
+3. Settings → **Reload**.
+
+```json
+{
+  "id": "my-term",
+  "term": "My Term",
+  "whatItIs": "One-sentence plain summary.",
+  "analogy": "A vivid everyday comparison.",
+  "whyItMatters": "Why it's useful in one sentence.",
+  "example": "A concrete example."
+}
+```
+
+If your edit has a JSON error, the app keeps the built-in terms and tells you. When
+an update ships **new** built-ins, they're merged in automatically without touching
+your own terms or edits.
 
 ## Build & run
 
-Requires Xcode 26 / Swift 6.3 toolchain.
+Requires Xcode 26 / Swift 6.3.
 
 ```bash
 swift run Glossary        # run in dev
-swift test                # run unit tests
+swift test                # run the unit tests
 scripts/build-app.sh      # build a distributable Glossary.app
 ```
 
-`scripts/build-app.sh` produces `Glossary.app`, a true menu-bar agent (no Dock icon,
-`LSUIElement`). Double-click it, or add it to **System Settings → General → Login
-Items** to have it ready at all times. Press `Option+Space` to summon.
+`scripts/build-app.sh` produces `Glossary.app` — a menu-bar agent (no Dock icon).
+Double-click it, or add it to **System Settings → General → Login Items**, then press
+`⌥Esc`.
 
-## Data & adding terms
+## Architecture
 
-On first launch the app seeds an **editable glossary file** at
-`~/Library/Application Support/Glossary/glossary.json` from the built-in terms.
-That file is the source of truth from then on — **add terms without rebuilding**:
-
-1. Settings (`⌘,`) → **Copy New-Term Template** (gives you the exact JSON shape).
-2. **Open Glossary File…** (or **Reveal in Finder**), paste the template inside the
-   `[ … ]` list, and fill in the fields.
-3. Back in Settings → **Reload**.
-
-Each entry has: `id`, `term`, `whatItIs`, `analogy`, `whyItMatters`, `example`.
-**Reset Glossary to Default** restores the built-in set. (If your edit has a JSON
-error, the app keeps the built-in terms and tells you — just fix it and Reload.)
-
-When an app update ships **new** built-in terms, they're merged into your file
-automatically on launch (or via **Add New Built-in Terms**) — your own terms and
-edits are kept, and built-ins you deleted are not brought back.
-
-The built-in seed lives in [`Sources/GlossaryCore/Resources/glossary.json`](Sources/GlossaryCore/Resources/glossary.json).
-
-## Project layout
+- **`GlossaryCore`** (library, fully unit-tested) — `Term`, JSON loader,
+  `FuzzyMatcher`, `AppState` (modes, disclosure, frecency), `TermFormatter`,
+  `UsageStore`. No AppKit.
+- **`Glossary`** (executable) — the AppKit shell: status item, Carbon global hotkey,
+  floating `NSPanel` overlay and `NSPopover` mini mode, Settings, and the SwiftUI
+  views.
 
 See [CLAUDE.md](CLAUDE.md) and the [design spec](docs/superpowers/specs/2026-06-29-glossary-menu-bar-design.md).
+
+## License
+
+[MIT](LICENSE) © 2026 KIKA
