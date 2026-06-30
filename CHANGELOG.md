@@ -6,6 +6,8 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-06-29
+
 ### Added
 - **MIT `LICENSE`.**
 - **Polished README** — app-icon header, badges, and screenshots (Overlay search,
